@@ -10,390 +10,240 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DompetKu">
 <meta name="description" content="Aplikasi catatan keuangan pribadi">
-<meta name="application-name" content="DompetKu">
 <title>DompetKu</title>
-
-<!-- PWA: inject manifest via JS blob -->
 <script>
 (function(){
-  const IC192 = '""" + IC192 + r"""';
-  const IC512 = '""" + IC512 + r"""';
-  const manifest = {
-    name: "DompetKu - Financial Tracker",
-    short_name: "DompetKu",
-    description: "Aplikasi catatan keuangan pribadi",
-    start_url: "./",
-    display: "standalone",
-    orientation: "portrait",
-    background_color: "#0d1117",
-    theme_color: "#1d4ed8",
-    categories: ["finance","productivity"],
-    icons: [
-      { src: "data:image/svg+xml;base64," + IC192, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
-      { src: "data:image/svg+xml;base64," + IC512, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
-    ]
-  };
-  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-  const url  = URL.createObjectURL(blob);
-  const link = document.createElement('link');
-  link.rel   = 'manifest';
-  link.href  = url;
-  document.head.appendChild(link);
-
-  // Apple touch icon
-  const appleIcon = document.createElement('link');
-  appleIcon.rel   = 'apple-touch-icon';
-  appleIcon.href  = "data:image/svg+xml;base64," + IC192;
-  document.head.appendChild(appleIcon);
+  const I2='""" + IC192 + r"""', I5='""" + IC512 + r"""';
+  const mf={name:"DompetKu - Financial Tracker",short_name:"DompetKu",
+    description:"Catatan keuangan pribadi",start_url:"./",display:"standalone",
+    orientation:"portrait",background_color:"#0d1117",theme_color:"#1d4ed8",
+    icons:[{src:"data:image/svg+xml;base64,"+I2,sizes:"192x192",type:"image/svg+xml",purpose:"any maskable"},
+           {src:"data:image/svg+xml;base64,"+I5,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
+  const b=new Blob([JSON.stringify(mf)],{type:'application/manifest+json'});
+  const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+  const al=document.createElement('link');al.rel='apple-touch-icon';
+  al.href='data:image/svg+xml;base64,'+I2;document.head.appendChild(al);
 })();
 </script>
-
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-
 <style>
-/* ── THEMES ─────────────────────────────── */
-[data-theme="dark"]{
-  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#2d333b;
-  --card:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#e6edf3;--text2:#8b949e;--text3:#484f58;
-  --inp:#21262d;--ov:rgba(0,0,0,0.82);--sh:0 8px 40px rgba(0,0,0,.5);
-}
-[data-theme="light"]{
-  --bg:#f6f8fa;--bg2:#ffffff;--bg3:#f0f3f7;--bg4:#e4e8ef;
-  --card:#ffffff;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
-  --text:#1c2128;--text2:#57606a;--text3:#9ea8b2;
-  --inp:#f0f3f7;--ov:rgba(0,0,0,0.55);--sh:0 8px 40px rgba(0,0,0,.12);
-}
-:root{
-  --green:#3fb950;--green-d:rgba(63,185,80,.13);
-  --red:#f85149;  --red-d:rgba(248,81,73,.13);
-  --blue:#58a6ff; --blue-d:rgba(88,166,255,.13);
-  --amber:#e3a008;--amber-d:rgba(227,160,8,.15);
-  --purple:#bc8cff;--purple-d:rgba(188,140,255,.13);
-  --nav:68px;--safe:env(safe-area-inset-bottom,0px);
-  --r:14px;--r2:10px;
-}
-
-/* ── RESET ──────────────────────────────── */
+[data-theme="dark"]{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#2d333b;--card:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#e6edf3;--text2:#8b949e;--text3:#484f58;--inp:#21262d;--ov:rgba(0,0,0,0.82);--sh:0 8px 40px rgba(0,0,0,.5);}
+[data-theme="light"]{--bg:#f6f8fa;--bg2:#ffffff;--bg3:#f0f3f7;--bg4:#e4e8ef;--card:#ffffff;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--text:#1c2128;--text2:#57606a;--text3:#9ea8b2;--inp:#f0f3f7;--ov:rgba(0,0,0,0.55);--sh:0 8px 40px rgba(0,0,0,.12);}
+:root{--green:#3fb950;--gd:rgba(63,185,80,.13);--red:#f85149;--rd:rgba(248,81,73,.13);--blue:#58a6ff;--bd:rgba(88,166,255,.13);--amber:#e3a008;--ad:rgba(227,160,8,.15);--purple:#bc8cff;--pd:rgba(188,140,255,.13);--nav:68px;--safe:env(safe-area-inset-bottom,0px);--r:14px;--r2:10px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;transition:background .2s,color .2s}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;transition:background .2s,color .2s}
 #app{height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;position:relative}
-
-/* ── PAGES ──────────────────────────────── */
-.page{flex:1;overflow-y:auto;overflow-x:hidden;
-  padding-bottom:calc(var(--nav) + var(--safe) + 20px);display:none}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav) + var(--safe) + 20px);display:none}
 .page.active{display:block}
 .page::-webkit-scrollbar{display:none}
-
-/* ── BOTTOM NAV ─────────────────────────── */
-.nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;
-  background:var(--bg2);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border-top:1px solid var(--border);
-  display:flex;align-items:center;
-  height:calc(var(--nav) + var(--safe));padding-bottom:var(--safe);
-  z-index:100;transition:background .2s;
-}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:10px 0;cursor:pointer;color:var(--text3);transition:color .15s;position:relative}
+/* NAV */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg2);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;height:calc(var(--nav) + var(--safe));padding-bottom:var(--safe);z-index:100;transition:background .2s;}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;color:var(--text3);transition:color .15s;position:relative}
 .ni.on{color:var(--blue)}
 .ni svg{width:21px;height:21px;stroke-width:1.8;stroke:currentColor;fill:none}
 .ni span{font-size:10px;font-weight:700;letter-spacing:.2px}
-.ni-dot{position:absolute;top:6px;right:calc(50% - 14px);width:8px;height:8px;
-  border-radius:50%;background:var(--red);border:2px solid var(--bg2);display:none}
+.ni-dot{position:absolute;top:6px;right:calc(50% - 14px);width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--bg2);display:none}
 .ni-dot.show{display:block}
-
-/* ── LAYOUT ─────────────────────────────── */
+/* LAYOUT */
 .ph{padding:22px 18px 0;display:flex;align-items:flex-start;justify-content:space-between}
 .pt{font-size:22px;font-weight:800;letter-spacing:-.3px}
 .ps{font-size:13px;color:var(--text2);margin-top:3px}
 .sec{padding:0 18px;margin-top:18px}
-.sl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;
-  letter-spacing:.9px;margin-bottom:10px}
-.card{background:var(--card);border-radius:var(--r);padding:16px;
-  border:1px solid var(--border);transition:background .2s}
-
-/* ── HERO CARD ──────────────────────────── */
-.hero{
-  margin:18px 18px 0;
-  background:linear-gradient(145deg,#0d2137 0%,#0f2d52 50%,#0a1628 100%);
-  border-radius:22px;padding:22px 20px;
-  border:1px solid rgba(88,166,255,.2);position:relative;overflow:hidden;
-}
+.sl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;margin-bottom:10px}
+.card{background:var(--card);border-radius:var(--r);padding:16px;border:1px solid var(--border);transition:background .2s}
+/* HERO */
+.hero{margin:18px 18px 0;background:linear-gradient(145deg,#0d2137 0%,#0f2d52 50%,#0a1628 100%);border-radius:22px;padding:22px 20px;border:1px solid rgba(88,166,255,.2);position:relative;overflow:hidden;}
 [data-theme="light"] .hero{background:linear-gradient(145deg,#1e40af,#1d4ed8,#1e3a8a)}
-.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;
-  border-radius:50%;background:rgba(88,166,255,.07);pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;
-  border-radius:50%;background:rgba(188,140,255,.07);pointer-events:none}
-.hero-lbl{font-size:11px;color:rgba(255,255,255,.55);font-weight:600;
-  letter-spacing:.6px;text-transform:uppercase}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(88,166,255,.07);pointer-events:none}
+.hero-lbl{font-size:11px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.6px;text-transform:uppercase}
 .hero-amt{font-size:34px;font-weight:800;color:#fff;margin:5px 0 18px;letter-spacing:-.5px}
 .hero-row{display:flex;gap:10px}
 .hero-stat{flex:1;background:rgba(255,255,255,.1);border-radius:11px;padding:11px 13px}
 .hero-stat-lbl{font-size:11px;color:rgba(255,255,255,.55)}
 .hero-stat-val{font-size:15px;font-weight:700;color:#fff;margin-top:4px}
-
-/* ── DEBT WIDGETS ───────────────────────── */
+/* DEBT WIDGET */
 .dw-row{display:flex;gap:10px;padding:0 18px;margin-top:10px}
-.dw{flex:1;background:var(--card);border-radius:var(--r2);padding:13px;
-  border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.dw{flex:1;background:var(--card);border-radius:var(--r2);padding:13px;border:1px solid var(--border);cursor:pointer;transition:all .15s}
 .dw:active{transform:scale(.96)}
-.dw-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
-  justify-content:center;margin-bottom:7px;font-size:16px}
+.dw-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:7px;font-size:16px}
 .dw-lbl{font-size:11px;color:var(--text2);font-weight:600}
 .dw-val{font-size:17px;font-weight:800;margin-top:3px}
-
-/* ── TX ROW ─────────────────────────────── */
-.txi{display:flex;align-items:center;gap:11px;padding:11px 0;
-  border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
+/* TX ROW */
+.txi{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
 .txi:active{opacity:.6}
 .txi:last-child{border-bottom:none}
-.txi-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;font-size:17px}
+.txi-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
 .txi-info{flex:1;min-width:0}
 .txi-name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .txi-meta{font-size:12px;color:var(--text3);margin-top:2px}
 .txi-amt{font-weight:700;font-size:14px;white-space:nowrap;text-align:right}
-
-/* ── CHIPS ──────────────────────────────── */
+/* CHIPS */
 .chips{display:flex;gap:7px;padding:0 18px 10px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:700;
-  white-space:nowrap;cursor:pointer;background:var(--bg3);color:var(--text2);
-  border:1.5px solid transparent;flex-shrink:0;transition:all .15s;font-family:inherit}
-.chip.c-blue{background:var(--blue-d);color:var(--blue);border-color:rgba(88,166,255,.3)}
-.chip.c-green{background:var(--green-d);color:var(--green);border-color:rgba(63,185,80,.3)}
-.chip.c-red{background:var(--red-d);color:var(--red);border-color:rgba(248,81,73,.3)}
-
-/* ── DATE RANGE ─────────────────────────── */
-.dr{margin:0 18px 10px;background:var(--card);border-radius:var(--r2);
-  padding:12px;border:1px solid var(--border);display:none;gap:8px;align-items:center}
+.chip{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;background:var(--bg3);color:var(--text2);border:1.5px solid transparent;flex-shrink:0;transition:all .15s;font-family:inherit}
+.chip.cb{background:var(--bd);color:var(--blue);border-color:rgba(88,166,255,.3)}
+.chip.cg{background:var(--gd);color:var(--green);border-color:rgba(63,185,80,.3)}
+.chip.cr{background:var(--rd);color:var(--red);border-color:rgba(248,81,73,.3)}
+/* DATE RANGE */
+.dr{margin:0 18px 10px;background:var(--card);border-radius:var(--r2);padding:12px;border:1px solid var(--border);display:none;gap:8px;align-items:center}
 .dr.open{display:flex;animation:fu .2s ease}
-.dr input{flex:1;background:var(--inp);border:1.5px solid var(--border);border-radius:9px;
-  padding:9px 11px;color:var(--text);font-family:inherit;font-size:13px;
-  outline:none;min-width:0;transition:border-color .15s}
+.dr input{flex:1;background:var(--inp);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-family:inherit;font-size:13px;outline:none;min-width:0}
 .dr input:focus{border-color:var(--blue)}
-.dr-sep{color:var(--text3);font-size:13px;flex-shrink:0}
-
-/* ── SUMMARY MINI ───────────────────────── */
+/* SMINI */
 .smini{display:flex;gap:9px;padding:0 18px;margin-bottom:10px}
-.smini-item{flex:1;border-radius:var(--r2);padding:10px 12px}
-
-/* ── DEBT CARD ──────────────────────────── */
-.dc{padding:14px;background:var(--card);border-radius:var(--r);
-  border:1px solid var(--border);margin-bottom:10px;transition:background .2s}
+.smini-i{flex:1;border-radius:var(--r2);padding:10px 12px}
+/* DEBT CARD */
+.dc{padding:14px;background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:10px;transition:background .2s}
 .dc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
 .dc-name{font-weight:700;font-size:15px}
 .dc-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0;margin-left:8px}
 .pbar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:5px 0 4px}
 .pfill{height:100%;border-radius:3px;transition:width .5s ease}
 .dc-acts{display:flex;gap:7px;margin-top:10px}
-
-/* ── TABS ───────────────────────────────── */
+/* TABS */
 .tabs{display:flex;background:var(--bg3);border-radius:12px;padding:3px;gap:3px;margin:0 18px 14px}
-.tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;border-radius:9px;
-  cursor:pointer;transition:all .2s;color:var(--text3)}
+.tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;border-radius:9px;cursor:pointer;transition:all .2s;color:var(--text3)}
 .tab.on{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.2)}
-
-/* ── CHART ──────────────────────────────── */
 .chart-wrap{position:relative;height:190px;padding:8px 0}
-
-/* ── BUTTONS ────────────────────────────── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  padding:13px 18px;border-radius:12px;font-family:inherit;font-size:14px;
-  font-weight:700;cursor:pointer;transition:all .15s;border:none;letter-spacing:-.1px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 18px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;border:none;letter-spacing:-.1px}
 .btn:active{transform:scale(.96)}
 .btn-p{background:var(--blue);color:#fff;width:100%}
 .btn-g{background:var(--bg3);color:var(--text);width:100%}
 .btn-sm{padding:7px 13px;font-size:12px;border-radius:8px}
-.btn-red{background:var(--red-d);color:var(--red)}
-.btn-amber{background:var(--amber-d);color:var(--amber)}
-.btn-green{background:var(--green-d);color:var(--green)}
-.btn-blue{background:var(--blue-d);color:var(--blue)}
+.btn-red{background:var(--rd);color:var(--red)}
+.btn-amber{background:var(--ad);color:var(--amber)}
+.btn-green{background:var(--gd);color:var(--green)}
+.btn-blue{background:var(--bd);color:var(--blue)}
 
-/* ── FAB VOICE ──────────────────────────── */
-.fab{
-  position:fixed;bottom:calc(var(--nav) + var(--safe) + 14px);right:18px;
-  width:54px;height:54px;border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#6366f1);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:none;z-index:200;
-  box-shadow:0 4px 18px rgba(99,102,241,.45);transition:all .2s;
+/* ── SMART INPUT BAR ──────────────────────── */
+.smart-bar{
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + 10px);
+  left:50%;transform:translateX(-50%);
+  width:calc(100% - 36px);max-width:444px;
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:18px;padding:8px 10px 8px 14px;
+  box-shadow:var(--sh);z-index:200;transition:border-color .15s;
 }
-.fab:active{transform:scale(.88)}
-.fab.mic-on{animation:mic-p 1.1s infinite;background:linear-gradient(135deg,#ef4444,#f97316)}
-@keyframes mic-p{
-  0%,100%{box-shadow:0 4px 18px rgba(239,68,68,.45)}
-  50%{box-shadow:0 4px 30px rgba(239,68,68,.75),0 0 0 9px rgba(239,68,68,.12)}
-}
-.fab svg{width:23px;height:23px;stroke:#fff;stroke-width:2;fill:none}
+.smart-bar:focus-within{border-color:var(--blue)}
+.smart-bar input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:14px;padding:4px 0}
+.smart-bar input::placeholder{color:var(--text3)}
+.sb-mic{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;cursor:pointer;flex-shrink:0;transition:all .2s}
+.sb-mic:active{transform:scale(.88)}
+.sb-mic.on{animation:mic-p 1.1s infinite;background:linear-gradient(135deg,#ef4444,#f97316)}
+.sb-mic svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none}
+.sb-send{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--blue);border:none;cursor:pointer;flex-shrink:0;transition:all .2s}
+.sb-send:active{transform:scale(.88)}
+.sb-send svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none}
+@keyframes mic-p{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,.0)}}
 
-/* ── VOICE PANEL ────────────────────────── */
-.vp{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
-  width:100%;max-width:480px;background:var(--bg2);
-  border-radius:22px 22px 0 0;border-top:1px solid var(--border);
-  padding:18px 18px calc(var(--nav) + var(--safe) + 18px);
-  z-index:300;transition:transform .3s cubic-bezier(.4,0,.2,1);
+/* ── SMART RESULT BUBBLE ─────────────────── */
+.smart-result{
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + 78px);
+  left:50%;transform:translateX(-50%) translateY(8px);
+  width:calc(100% - 36px);max-width:444px;
+  background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:16px;padding:13px 14px;
+  box-shadow:var(--sh);z-index:199;
+  display:none;opacity:0;transition:all .2s;
 }
-.vp.open{transform:translateX(-50%) translateY(0)}
-.vp-dots{display:flex;gap:5px;justify-content:center;margin:12px 0}
+.smart-result.show{display:block;opacity:1;transform:translateX(-50%) translateY(0)}
+.sr-preview{font-size:14px;line-height:1.7;margin-bottom:10px}
+.sr-btns{display:flex;gap:8px}
+
+/* VOICE HINT OVERLAY */
+.v-hint{
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + 78px);
+  left:50%;transform:translateX(-50%) translateY(8px);
+  width:calc(100% - 36px);max-width:444px;
+  background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:16px;padding:14px;box-shadow:var(--sh);z-index:199;
+  display:none;
+}
+.v-hint.show{display:block;animation:fu .2s ease}
+.v-dots{display:flex;gap:5px;justify-content:center;margin:10px 0 8px}
 .vd{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:bounce .9s infinite}
 .vd:nth-child(2){animation-delay:.12s}
 .vd:nth-child(3){animation-delay:.24s}
 @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
-.v-txt{font-size:15px;text-align:center;min-height:40px;color:var(--text2);line-height:1.5;padding:0 8px}
-.v-res{margin-top:10px;background:var(--bg3);border-radius:11px;padding:13px;
-  font-size:14px;display:none;line-height:1.7}
-.v-res.show{display:block}
 
-/* ── MODAL ──────────────────────────────── */
-.ov{position:fixed;inset:0;background:var(--ov);backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);z-index:400;display:none;align-items:flex-end;justify-content:center}
+/* OFFLINE BAR */
+.off-bar{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-50px);width:100%;max-width:480px;background:var(--red);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:9999;transition:transform .3s;}
+.off-bar.show{transform:translateX(-50%) translateY(0)}
+
+/* INSTALL BANNER */
+.inst{position:fixed;bottom:calc(var(--nav) + var(--safe) + 10px);left:18px;right:18px;background:linear-gradient(135deg,#1d4ed8,#4f46e5);border-radius:16px;padding:13px 14px;z-index:150;display:none;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(29,78,216,.4);animation:fu .3s ease;}
+.inst.show{display:flex}
+/* MODAL */
+.ov{position:fixed;inset:0;background:var(--ov);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);z-index:400;display:none;align-items:flex-end;justify-content:center}
 .ov.open{display:flex}
-.m{background:var(--bg2);border-radius:22px 22px 0 0;width:100%;max-width:480px;
-  padding:22px 18px calc(var(--safe) + 22px);max-height:93vh;overflow-y:auto;transition:background .2s}
+.m{background:var(--bg2);border-radius:22px 22px 0 0;width:100%;max-width:480px;padding:22px 18px calc(var(--safe) + 22px);max-height:93vh;overflow-y:auto;transition:background .2s}
 .m::-webkit-scrollbar{display:none}
 .mh{width:34px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 18px}
 .mt{font-size:18px;font-weight:800;margin-bottom:18px}
 .ov.open .m{animation:su .28s cubic-bezier(.4,0,.2,1)}
 @keyframes su{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-/* ── FORM ───────────────────────────────── */
+/* FORM */
 .fg{margin-bottom:14px}
-.fl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;
-  letter-spacing:.5px;margin-bottom:7px;display:block}
-.fi{width:100%;background:var(--inp);border:1.5px solid var(--border);border-radius:11px;
-  padding:12px 14px;color:var(--text);font-family:inherit;font-size:15px;
-  outline:none;transition:border-color .15s,background .2s}
+.fl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.fi{width:100%;background:var(--inp);border:1.5px solid var(--border);border-radius:11px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:15px;outline:none;transition:border-color .15s,background .2s}
 .fi:focus{border-color:var(--blue)}
 select.fi{cursor:pointer}
 .ttype{display:flex;background:var(--bg3);border-radius:11px;padding:3px;gap:3px}
-.tt{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:700;border-radius:8px;
-  cursor:pointer;transition:all .2s;color:var(--text3)}
-.tt.ai{background:var(--green-d);color:var(--green)}
-.tt.ae{background:var(--red-d);color:var(--red)}
-.tt.ah{background:var(--amber-d);color:var(--amber)}
-.tt.ap{background:var(--blue-d);color:var(--blue)}
-
-/* ── SETTINGS ───────────────────────────── */
+.tt{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:700;border-radius:8px;cursor:pointer;transition:all .2s;color:var(--text3)}
+.tt.ai{background:var(--gd);color:var(--green)}
+.tt.ae{background:var(--rd);color:var(--red)}
+.tt.ah{background:var(--ad);color:var(--amber)}
+.tt.ap{background:var(--bd);color:var(--blue)}
+/* SETTINGS */
 .ss{margin:18px 18px 0}
-.ss-t{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;
-  letter-spacing:1px;margin-bottom:7px;padding:0 2px}
-.sg{background:var(--card);border-radius:var(--r);overflow:hidden;
-  border:1px solid var(--border);transition:background .2s}
-.sr{display:flex;align-items:center;gap:13px;padding:14px 15px;cursor:pointer;
-  transition:background .12s;position:relative}
-.sr:not(:last-child)::after{content:'';position:absolute;bottom:0;left:52px;right:0;
-  height:1px;background:var(--border)}
+.ss-t{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding:0 2px}
+.sg{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:background .2s}
+.sr{display:flex;align-items:center;gap:13px;padding:14px 15px;cursor:pointer;transition:background .12s;position:relative}
+.sr:not(:last-child)::after{content:'';position:absolute;bottom:0;left:52px;right:0;height:1px;background:var(--border)}
 .sr:active{background:var(--bg3)}
-.sr-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;font-size:16px}
+.sr-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .sr-c{flex:1;min-width:0}
 .sr-lbl{font-size:15px;font-weight:600}
 .sr-sub{font-size:12px;color:var(--text3);margin-top:2px}
 .sr-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
 .chev{width:15px;height:15px;stroke:var(--text3);stroke-width:2;fill:none}
-.badge-tag{font-size:11px;background:var(--bg3);padding:3px 9px;border-radius:20px;
-  font-weight:700;color:var(--text2)}
-
-/* ── TOGGLE ─────────────────────────────── */
-.tog{width:44px;height:24px;background:var(--bg4);border-radius:12px;
-  position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
+.badge-tag{font-size:11px;background:var(--bg3);padding:3px 9px;border-radius:20px;font-weight:700;color:var(--text2)}
+.tog{width:44px;height:24px;background:var(--bg4);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
 .tog.on{background:var(--blue)}
-.tog::after{content:'';width:18px;height:18px;background:#fff;border-radius:50%;
-  position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tog::after{content:'';width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .tog.on::after{left:23px}
-
-/* ── CATEGORY ───────────────────────────── */
-.cat-row{display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:var(--card);border-radius:var(--r2);margin-bottom:8px;border:1px solid var(--border)}
-.cat-emj{width:38px;height:38px;border-radius:9px;background:var(--bg3);
-  display:flex;align-items:center;justify-content:center;font-size:20px;
-  cursor:pointer;flex-shrink:0;border:1px solid var(--border);transition:background .15s}
+/* CATEGORY */
+.cat-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-radius:var(--r2);margin-bottom:8px;border:1px solid var(--border)}
+.cat-emj{width:38px;height:38px;border-radius:9px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;flex-shrink:0;border:1px solid var(--border);transition:background .15s}
 .cat-emj:active{background:var(--bg4)}
-.cat-inp{flex:1;background:transparent;border:none;color:var(--text);
-  font-family:inherit;font-size:14px;font-weight:600;outline:none;padding:2px 0;min-width:0}
-.cat-sel{background:var(--bg3);border:1px solid var(--border);border-radius:7px;
-  color:var(--text);font-family:inherit;font-size:11px;font-weight:600;
-  padding:4px 6px;cursor:pointer;outline:none;flex-shrink:0}
-.cat-del{background:none;border:none;color:var(--text3);cursor:pointer;
-  padding:5px;border-radius:7px;font-size:17px;transition:all .15s;flex-shrink:0;line-height:1}
-.cat-del:active{color:var(--red);background:var(--red-d)}
-
-/* ── EMOJI GRID ─────────────────────────── */
-.emj-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;
-  max-height:220px;overflow-y:auto;padding:2px}
-.emj-grid::-webkit-scrollbar{width:4px}
-.emj-grid::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
-.emj-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-  font-size:22px;border-radius:8px;cursor:pointer;transition:background .12s}
+.cat-inp{flex:1;background:transparent;border:none;color:var(--text);font-family:inherit;font-size:14px;font-weight:600;outline:none;padding:2px 0;min-width:0}
+.cat-sel{background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:inherit;font-size:11px;font-weight:600;padding:4px 6px;cursor:pointer;outline:none;flex-shrink:0}
+.cat-del{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:7px;font-size:17px;transition:all .15s;flex-shrink:0;line-height:1}
+.cat-del:active{color:var(--red);background:var(--rd)}
+.emj-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;max-height:220px;overflow-y:auto;padding:2px}
+.emj-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:22px;border-radius:8px;cursor:pointer;transition:background .12s}
 .emj-cell:active{background:var(--bg3)}
-
-/* ── PROFILE ────────────────────────────── */
-.av{width:70px;height:70px;border-radius:50%;margin:0 auto 10px;
-  display:flex;align-items:center;justify-content:center;font-size:30px;
-  font-weight:800;background:var(--blue-d);color:var(--blue);
-  cursor:pointer;transition:transform .15s;user-select:none}
+.av{width:70px;height:70px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;background:var(--bd);color:var(--blue);cursor:pointer;transition:transform .15s;user-select:none}
 .av:active{transform:scale(.92)}
-
-/* ── PAY HISTORY ────────────────────────── */
-.ph-row{display:flex;justify-content:space-between;padding:8px 0;
-  border-bottom:1px solid var(--border);font-size:13px}
+.ph-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .ph-row:last-child{border-bottom:none}
-
-/* ── EXPORT ─────────────────────────────── */
 .exp-row{display:flex;gap:10px;padding:0 18px;margin-top:14px}
-.exp-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-  padding:13px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
-  font-size:14px;font-weight:700;cursor:pointer;color:var(--text);
-  font-family:inherit;transition:all .15s}
+.exp-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);font-size:14px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;transition:all .15s}
 .exp-btn:active{transform:scale(.96);background:var(--bg3)}
-
-/* ── INSTALL BANNER ─────────────────────── */
-.install-banner{
-  position:fixed;bottom:calc(var(--nav) + var(--safe) + 80px);left:18px;right:18px;
-  background:linear-gradient(135deg,#1d4ed8,#4f46e5);
-  border-radius:16px;padding:14px 16px;z-index:150;
-  display:none;align-items:center;gap:12px;
-  box-shadow:0 8px 32px rgba(29,78,216,.4);
-  animation:fu .3s ease;
-}
-.install-banner.show{display:flex}
-.install-banner-txt{flex:1;min-width:0}
-.install-banner-txt strong{font-size:14px;color:#fff;display:block}
-.install-banner-txt span{font-size:12px;color:rgba(255,255,255,.75)}
-
-/* ── OFFLINE TOAST ──────────────────────── */
-.offline-bar{
-  position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-50px);
-  width:100%;max-width:480px;background:#ef4444;color:#fff;
-  text-align:center;padding:10px;font-size:13px;font-weight:700;
-  z-index:9999;transition:transform .3s;
-}
-.offline-bar.show{transform:translateX(-50%) translateY(0)}
-
-/* ── TOAST ──────────────────────────────── */
-.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-90px);
-  background:var(--card);color:var(--text);padding:11px 18px;border-radius:11px;
-  font-size:14px;font-weight:600;z-index:9999;transition:transform .28s;
-  border:1px solid var(--border);max-width:88vw;box-shadow:var(--sh);white-space:nowrap}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-90px);background:var(--card);color:var(--text);padding:11px 18px;border-radius:11px;font-size:14px;font-weight:600;z-index:9999;transition:transform .28s;border:1px solid var(--border);max-width:88vw;box-shadow:var(--sh);white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.ok{color:var(--green);border-color:rgba(63,185,80,.3)}
 .toast.err{color:var(--red);border-color:rgba(248,81,73,.3)}
 .toast.info{color:var(--blue);border-color:rgba(88,166,255,.3)}
-
-/* ── EMPTY ──────────────────────────────── */
 .empty{text-align:center;padding:36px 20px;color:var(--text3)}
 .empty-i{font-size:38px;margin-bottom:10px}
 .empty p{font-size:13px}
-
-/* ── ANIMATIONS ─────────────────────────── */
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fu{animation:fu .22s ease forwards}
 @keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
@@ -402,15 +252,12 @@ select.fi{cursor:pointer}
 </head>
 <body>
 <div id="app">
-
-  <!-- PAGES -->
   <div id="pg-dash" class="page active"></div>
   <div id="pg-tx"   class="page"></div>
   <div id="pg-debt" class="page"></div>
   <div id="pg-rep"  class="page"></div>
   <div id="pg-set"  class="page"></div>
 
-  <!-- BOTTOM NAV -->
   <nav class="nav">
     <div class="ni on" data-pg="dash" onclick="go('dash')">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
@@ -435,44 +282,43 @@ select.fi{cursor:pointer}
     </div>
   </nav>
 
-  <!-- FAB VOICE -->
-  <button class="fab" id="fabBtn" onclick="toggleVoice()">
-    <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/></svg>
-  </button>
+  <!-- SMART INPUT BAR -->
+  <div class="smart-bar" id="smartBar">
+    <input type="text" id="smartInput" placeholder='Ketik: "beli bensin 20rb" atau "gaji masuk 5jt"' autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')processSmart()">
+    <button class="sb-mic" id="micBtn" onclick="toggleMic()" title="Input suara">
+      <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/></svg>
+    </button>
+    <button class="sb-send" onclick="processSmart()" title="Kirim">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+
+  <!-- SMART RESULT -->
+  <div class="smart-result" id="smartResult">
+    <div class="sr-preview" id="srPreview"></div>
+    <div class="sr-btns">
+      <button class="btn btn-p btn-sm" style="flex:1" onclick="confirmSmart()">✓ Simpan</button>
+      <button class="btn btn-g btn-sm" style="flex:1" onclick="dismissSmart()">✕ Batal</button>
+    </div>
+  </div>
+
+  <!-- VOICE HINT -->
+  <div class="v-hint" id="vHint">
+    <div style="text-align:center;font-size:13px;font-weight:700;color:var(--text2)" id="vHintTxt">Mendengarkan...</div>
+    <div class="v-dots"><div class="vd"></div><div class="vd"></div><div class="vd"></div></div>
+    <div style="font-size:13px;text-align:center;color:var(--text2);min-height:22px" id="vLive"></div>
+  </div>
 
   <!-- INSTALL BANNER -->
-  <div class="install-banner" id="installBanner">
-    <span style="font-size:28px">📲</span>
-    <div class="install-banner-txt">
-      <strong>Install DompetKu</strong>
-      <span>Tambahkan ke layar utama HP kamu</span>
-    </div>
-    <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;flex-shrink:0" onclick="doInstall()">Install</button>
-    <button style="background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;padding:0 2px;flex-shrink:0" onclick="dismissInstall()">✕</button>
+  <div class="inst" id="instBanner">
+    <span style="font-size:26px;flex-shrink:0">📲</span>
+    <div style="flex:1;min-width:0"><strong style="font-size:13px;color:#fff;display:block">Install DompetKu</strong><span style="font-size:11px;color:rgba(255,255,255,.7)">Tambahkan ke layar utama HP</span></div>
+    <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;flex-shrink:0;white-space:nowrap" onclick="doInstall()">Install</button>
+    <button style="background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:0 2px;flex-shrink:0" onclick="document.getElementById('instBanner').classList.remove('show')">✕</button>
   </div>
 
   <!-- OFFLINE BAR -->
-  <div class="offline-bar" id="offlineBar">📡 Kamu sedang offline — data tetap tersimpan lokal</div>
-
-  <!-- VOICE PANEL -->
-  <div class="vp" id="vPanel">
-    <div style="width:32px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 14px"></div>
-    <div style="text-align:center;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:2px" id="vStatus">Tap mikrofon untuk mulai</div>
-    <div class="vp-dots" id="vDots" style="display:none"><div class="vd"></div><div class="vd"></div><div class="vd"></div></div>
-    <div class="v-txt" id="vText">Contoh: "Beli bensin 20 ribu" atau "Gaji masuk 4 juta"</div>
-    <div class="v-res" id="vRes"></div>
-    <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-g" style="flex:1" onclick="closeVoice()">Tutup</button>
-      <button class="btn btn-p" style="flex:1;display:none" id="vConfirm" onclick="confirmVoice()">✓ Simpan</button>
-    </div>
-    <div style="margin-top:12px;background:var(--bg3);border-radius:10px;padding:11px 13px;font-size:12px;color:var(--text3);line-height:1.75">
-      💡 <strong style="color:var(--text2)">Contoh perintah:</strong><br>
-      • "Makan siang 25 ribu" → pengeluaran<br>
-      • "Gaji masuk 5 juta" → pemasukan<br>
-      • "Hutang ke Budi 200 ribu" → catat hutang<br>
-      • "Bayar hutang Budi 50 ribu" → cicil hutang
-    </div>
-  </div>
+  <div class="off-bar" id="offBar">📡 Offline — data tetap aman tersimpan lokal</div>
 
   <!-- MODAL: ADD TX -->
   <div class="ov" id="mTx">
@@ -483,7 +329,7 @@ select.fi{cursor:pointer}
         <div class="tt ai" id="tt-in" onclick="setTxType('income')">＋ Masuk</div>
         <div class="tt"    id="tt-ex" onclick="setTxType('expense')">－ Keluar</div>
       </div>
-      <div class="fg"><label class="fl">Keterangan</label><input class="fi" id="txDesc" placeholder="Misal: Makan siang, Gaji..."></div>
+      <div class="fg"><label class="fl">Keterangan</label><input class="fi" id="txDesc" placeholder="Misal: Makan siang..."></div>
       <div class="fg"><label class="fl">Jumlah</label><input class="fi" id="txAmt" type="number" inputmode="numeric" placeholder="0"></div>
       <div class="fg"><label class="fl">Kategori</label><select class="fi" id="txCat"></select></div>
       <div class="fg"><label class="fl">Tanggal</label><input class="fi" id="txDate" type="date"></div>
@@ -492,7 +338,6 @@ select.fi{cursor:pointer}
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mTx')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: ADD DEBT -->
   <div class="ov" id="mDebt">
     <div class="m">
@@ -510,7 +355,6 @@ select.fi{cursor:pointer}
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mDebt')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: PAY -->
   <div class="ov" id="mPay">
     <div class="m">
@@ -525,10 +369,8 @@ select.fi{cursor:pointer}
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mPay')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: DEBT DETAIL -->
   <div class="ov" id="mDD"><div class="m"><div class="mh"></div><div id="mDDc"></div><button class="btn btn-g" style="margin-top:8px" onclick="closeM('mDD')">Tutup</button></div></div>
-
   <!-- MODAL: CATEGORIES -->
   <div class="ov" id="mCats">
     <div class="m">
@@ -542,33 +384,20 @@ select.fi{cursor:pointer}
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mCats')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: EMOJI -->
-  <div class="ov" id="mEmoji">
-    <div class="m">
-      <div class="mh"></div>
-      <div class="mt">Pilih Emoji</div>
-      <div class="emj-grid" id="emojiGrid"></div>
-      <button class="btn btn-g" style="margin-top:14px" onclick="closeM('mEmoji')">Batal</button>
-    </div>
-  </div>
-
+  <div class="ov" id="mEmoji"><div class="m"><div class="mh"></div><div class="mt">Pilih Emoji</div><div class="emj-grid" id="emojiGrid"></div><button class="btn btn-g" style="margin-top:14px" onclick="closeM('mEmoji')">Batal</button></div></div>
   <!-- MODAL: PROFILE -->
   <div class="ov" id="mProf">
     <div class="m">
       <div class="mh"></div>
       <div class="mt">Profil Pengguna</div>
-      <div style="text-align:center;margin-bottom:18px">
-        <div class="av" id="profAv" onclick="cycleAv()"></div>
-        <div style="font-size:11px;color:var(--text3)">Tap untuk ganti avatar</div>
-      </div>
+      <div style="text-align:center;margin-bottom:18px"><div class="av" id="profAv" onclick="cycleAv()"></div><div style="font-size:11px;color:var(--text3)">Tap untuk ganti avatar</div></div>
       <div class="fg"><label class="fl">Nama</label><input class="fi" id="profName" placeholder="Nama kamu..."></div>
       <div class="fg"><label class="fl">Tagline</label><input class="fi" id="profBio" placeholder="Misal: Menabung demi masa depan..."></div>
       <button class="btn btn-p" onclick="saveProf()">Simpan</button>
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mProf')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: CURRENCY -->
   <div class="ov" id="mCurr">
     <div class="m">
@@ -579,27 +408,25 @@ select.fi{cursor:pointer}
           <option value="IDR">🇮🇩 Rupiah (IDR)</option>
           <option value="USD">🇺🇸 US Dollar (USD)</option>
           <option value="SGD">🇸🇬 Singapore Dollar (SGD)</option>
-          <option value="MYR">🇲🇾 Ringgit Malaysia (MYR)</option>
+          <option value="MYR">🇲🇾 Ringgit (MYR)</option>
           <option value="EUR">🇪🇺 Euro (EUR)</option>
-          <option value="JPY">🇯🇵 Yen Jepang (JPY)</option>
         </select>
       </div>
       <div class="fg"><label class="fl">Format Angka</label>
-        <select class="fi" id="numFmt">
-          <option value="id">1.000.000 (Indonesia)</option>
-          <option value="en">1,000,000 (Internasional)</option>
-        </select>
+        <select class="fi" id="numFmt"><option value="id">1.000.000 (Indonesia)</option><option value="en">1,000,000 (Internasional)</option></select>
       </div>
       <button class="btn btn-p" onclick="saveCurr()">Terapkan</button>
       <button class="btn btn-g" style="margin-top:8px" onclick="closeM('mCurr')">Batal</button>
     </div>
   </div>
-
   <!-- MODAL: BACKUP -->
   <div class="ov" id="mBackup">
     <div class="m">
       <div class="mh"></div>
       <div class="mt">Backup &amp; Restore</div>
+      <div style="background:var(--bd);border-radius:12px;padding:13px;margin-bottom:14px;font-size:13px;color:var(--blue);line-height:1.6">
+        🔒 <strong>Data tersimpan di IndexedDB</strong> — tidak hilang saat clear cache browser. Tetap lakukan backup berkala untuk keamanan ekstra.
+      </div>
       <div style="display:flex;flex-direction:column;gap:9px">
         <button class="exp-btn" style="border-radius:12px;padding:15px;justify-content:flex-start;gap:13px" onclick="doBackup()">
           <span style="font-size:26px">💾</span>
@@ -624,8 +451,68 @@ select.fi{cursor:pointer}
 
 <script>
 'use strict';
+// ═══ INDEXEDDB — data aman dari clear cache ═══
+const IDB = {
+  db: null,
+  open() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open('DompetKuDB', 2);
+      req.onupgradeneeded = e => {
+        const db = e.target.result;
+        ['txs','debts','cats','cfg'].forEach(s => {
+          if (!db.objectStoreNames.contains(s))
+            db.createObjectStore(s, {keyPath: 'id'});
+        });
+      };
+      req.onsuccess = e => { IDB.db = e.target.result; res(); };
+      req.onerror  = () => rej(req.error);
+    });
+  },
+  async getAll(store) {
+    return new Promise((res, rej) => {
+      const tx  = IDB.db.transaction(store, 'readonly');
+      const req = tx.objectStore(store).getAll();
+      req.onsuccess = () => res(req.result);
+      req.onerror   = () => rej(req.error);
+    });
+  },
+  async put(store, item) {
+    return new Promise((res, rej) => {
+      const tx  = IDB.db.transaction(store, 'readwrite');
+      const req = tx.objectStore(store).put(item);
+      req.onsuccess = () => res();
+      req.onerror   = () => rej(req.error);
+    });
+  },
+  async del(store, id) {
+    return new Promise((res, rej) => {
+      const tx  = IDB.db.transaction(store, 'readwrite');
+      const req = tx.objectStore(store).delete(id);
+      req.onsuccess = () => res();
+      req.onerror   = () => rej(req.error);
+    });
+  },
+  async clear(store) {
+    return new Promise((res, rej) => {
+      const tx  = IDB.db.transaction(store, 'readwrite');
+      const req = tx.objectStore(store).clear();
+      req.onsuccess = () => res();
+      req.onerror   = () => rej(req.error);
+    });
+  },
+  async putAll(store, items) {
+    const tx = IDB.db.transaction(store, 'readwrite');
+    const os = tx.objectStore(store);
+    items.forEach(i => os.put(i));
+    return new Promise((res, rej) => {
+      tx.oncomplete = res;
+      tx.onerror    = () => rej(tx.error);
+    });
+  }
+};
+
 // ═══ DATA ════════════════════════════════════
-const DEF_CATS=[
+const DEF_CATS = [
   {id:'dc1',name:'Makanan & Minuman',emoji:'🍽️',type:'expense'},
   {id:'dc2',name:'Transport',emoji:'🚗',type:'expense'},
   {id:'dc3',name:'Belanja',emoji:'🛒',type:'expense'},
@@ -639,89 +526,336 @@ const DEF_CATS=[
   {id:'dc11',name:'Bonus / Hadiah',emoji:'🎁',type:'income'},
   {id:'dc12',name:'Pembayaran Hutang',emoji:'💳',type:'both'},
 ];
-const DEF_CFG={theme:'dark',currency:'IDR',numFmt:'id',profile:{name:'Pengguna',bio:'',avatar:'👤'}};
+const DEF_CFG = {id:'cfg1',theme:'dark',currency:'IDR',numFmt:'id',profile:{name:'Pengguna',bio:'',avatar:'👤'}};
 
-function loadDB(){
-  return{
-    txs:  JSON.parse(localStorage.getItem('dk_txs')  ||'[]'),
-    debts:JSON.parse(localStorage.getItem('dk_debts')||'[]'),
-    cats: JSON.parse(localStorage.getItem('dk_cats') ||JSON.stringify(DEF_CATS)),
-    cfg:  JSON.parse(localStorage.getItem('dk_cfg')  ||JSON.stringify(DEF_CFG)),
-  };
+let D = { txs:[], debts:[], cats:[], cfg:{...DEF_CFG} };
+
+async function loadDB() {
+  try {
+    await IDB.open();
+    D.txs   = await IDB.getAll('txs');
+    D.debts = await IDB.getAll('debts');
+    D.cats  = await IDB.getAll('cats');
+    const cfgArr = await IDB.getAll('cfg');
+    D.cfg = cfgArr[0] || {...DEF_CFG};
+    if (!D.cats.length) { D.cats = [...DEF_CATS]; await IDB.putAll('cats', DEF_CATS); }
+    // Migrate from localStorage if first time
+    const oldTxs = localStorage.getItem('dk_txs');
+    if (oldTxs && !D.txs.length) {
+      const parsed = JSON.parse(oldTxs);
+      if (parsed.length) {
+        D.txs = parsed;
+        await IDB.putAll('txs', parsed);
+        const od = localStorage.getItem('dk_debts');
+        if (od) { D.debts = JSON.parse(od); await IDB.putAll('debts', D.debts); }
+        localStorage.removeItem('dk_txs'); localStorage.removeItem('dk_debts');
+        toast('📦 Data lama berhasil dipindah ke IndexedDB','ok');
+      }
+    }
+  } catch(e) {
+    console.warn('IDB failed, fallback localStorage', e);
+    D.txs   = JSON.parse(localStorage.getItem('dk_txs')  ||'[]');
+    D.debts = JSON.parse(localStorage.getItem('dk_debts')||'[]');
+    D.cats  = JSON.parse(localStorage.getItem('dk_cats') ||JSON.stringify(DEF_CATS));
+    D.cfg   = JSON.parse(localStorage.getItem('dk_cfg')  ||JSON.stringify(DEF_CFG));
+  }
 }
-function saveDB(){
-  localStorage.setItem('dk_txs',  JSON.stringify(D.txs));
-  localStorage.setItem('dk_debts',JSON.stringify(D.debts));
-  localStorage.setItem('dk_cats', JSON.stringify(D.cats));
-  localStorage.setItem('dk_cfg',  JSON.stringify(D.cfg));
+
+async function saveItem(store, item) {
+  try { await IDB.put(store, item); }
+  catch { localStorage.setItem('dk_'+store, JSON.stringify(D[store])); }
 }
-let D=loadDB();
+async function deleteItem(store, id) {
+  try { await IDB.del(store, id); }
+  catch { localStorage.setItem('dk_'+store, JSON.stringify(D[store])); }
+}
+async function saveAll(store) {
+  try { await IDB.clear(store); await IDB.putAll(store, D[store]); }
+  catch { localStorage.setItem('dk_'+store, JSON.stringify(D[store])); }
+}
 
 // ═══ UTILS ═══════════════════════════════════
-function fmt(n){
-  const locale=D.cfg.numFmt==='id'?'id-ID':'en-US';
-  try{return new Intl.NumberFormat(locale,{style:'currency',currency:D.cfg.currency||'IDR',minimumFractionDigits:0}).format(n||0);}
-  catch{return'Rp'+(n||0).toLocaleString('id-ID');}
+function fmt(n) {
+  const locale = D.cfg.numFmt==='id'?'id-ID':'en-US';
+  try { return new Intl.NumberFormat(locale,{style:'currency',currency:D.cfg.currency||'IDR',minimumFractionDigits:0}).format(n||0); }
+  catch { return 'Rp'+(n||0).toLocaleString('id-ID'); }
 }
-function fmtS(n){
-  const a=Math.abs(n||0),sym={IDR:'Rp',USD:'$',EUR:'€',SGD:'S$',MYR:'RM',JPY:'¥'}[D.cfg.currency||'IDR']||'Rp';
-  if(a>=1e9)return sym+(a/1e9).toFixed(1)+'M';
-  if(a>=1e6)return sym+(a/1e6).toFixed(1)+'jt';
-  if(a>=1e3)return sym+Math.round(a/1e3)+'rb';
+function fmtS(n) {
+  const a=Math.abs(n||0), sym={IDR:'Rp',USD:'$',EUR:'€',SGD:'S$',MYR:'RM',JPY:'¥'}[D.cfg.currency||'IDR']||'Rp';
+  if(a>=1e9) return sym+(a/1e9).toFixed(1)+'M';
+  if(a>=1e6) return sym+(a/1e6).toFixed(1)+'jt';
+  if(a>=1e3) return sym+Math.round(a/1e3)+'rb';
   return sym+Math.round(a);
 }
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const toDay=()=>new Date().toISOString().split('T')[0];
-const fmtD=d=>new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
-function catEmoji(n){const c=D.cats.find(x=>x.name===n);return c?c.emoji:'📌';}
-function toast(msg,type=''){
+const uid  = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const toDay= () => new Date().toISOString().split('T')[0];
+const fmtD = d  => new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+function catEmoji(n) { const c=D.cats.find(x=>x.name===n); return c?c.emoji:'📌'; }
+function toast(msg,type='') {
   const el=document.getElementById('toast');
-  el.textContent=msg;el.className='toast show '+(type||'');
-  clearTimeout(toast._t);toast._t=setTimeout(()=>el.className='toast',2600);
+  el.textContent=msg; el.className='toast show '+(type||'');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>el.className='toast',2600);
 }
 
-// ═══ THEME ═══════════════════════════════════
-function applyTheme(t){
+// ═══ AMOUNT PARSER (fixed — handles 20rb, 20ribu, 20 rb, 20.000, dll) ═══
+function parseAmount(text) {
+  // normalize: lowercase, remove dots/commas in numbers
+  const s = text.toLowerCase()
+    .replace(/rp\.?\s*/g,'')
+    .replace(/(\d)\.(\d{3})/g,'$1$2')   // 20.000 → 20000
+    .replace(/(\d),(\d{3})/g,'$1$2');   // 20,000 → 20000
+
+  // match number + optional unit (with or without space)
+  const m = s.match(/(\d+(?:[.,]\d+)?)\s*(ribu|rb|juta|jt|miliar|m|ratus|r|k)?(?:\b|$)/i);
+  if (!m) return 0;
+  let n = parseFloat(m[1].replace(',','.'));
+  const u = (m[2]||'').toLowerCase();
+  if (['ribu','rb','k'].includes(u))    n *= 1000;
+  else if (['juta','jt'].includes(u))   n *= 1e6;
+  else if (['miliar','m'].includes(u))  n *= 1e9;
+  else if (['ratus','r'].includes(u))   n *= 100;
+  // if no unit but number looks like raw (e.g. 20000) keep as is
+  return Math.round(n);
+}
+
+// ═══ COMMAND PARSER (text & voice shared) ════
+function parseCommand(raw) {
+  if (!raw || !raw.trim()) return null;
+  const s = raw.toLowerCase().trim()
+    .replace(/^(saya|aku|gue|gw|sy)\s+/,'')  // strip "saya ", "aku " prefix
+    .replace(/^(sudah|udah)\s+/,'');
+
+  const amt = parseAmount(s);
+
+  // BAYAR HUTANG
+  if (/bayar\s+hutang|lunasi\s+hutang/i.test(s)) {
+    const nm = s.replace(/bayar\s+hutang\s*/i,'').replace(/lunasi\s+hutang\s*/i,'')
+                .replace(/(?:ke|sama|si|buat|untuk)\s+/i,'')
+                .replace(/\s*[\d].*$/,'').trim();
+    const debt = D.debts.find(d => d.type==='hutang' && d.person.toLowerCase().includes(nm) && d.remaining>0);
+    if (debt) {
+      const pay = amt>0 ? Math.min(amt,debt.remaining) : debt.remaining;
+      return {action:'pay', debt, amount:pay,
+        preview:`💳 Bayar hutang <strong>${debt.person}</strong> sebesar <strong style="color:var(--amber)">${fmt(pay)}</strong><br><small style="color:var(--text3)">Sisa setelah bayar: ${fmt(debt.remaining-pay)}</small>`};
+    }
+    return {action:'err', preview:`❌ Hutang <em>"${nm||'?'}"</em> tidak ditemukan atau sudah lunas`};
+  }
+
+  // BAYAR PIUTANG (terima pembayaran)
+  if (/bayar\s+piutang|terima\s+bayar/i.test(s)) {
+    const nm = s.replace(/bayar\s+piutang\s*/i,'').replace(/(?:ke|sama|si|dari)\s+/i,'').replace(/\s*[\d].*$/,'').trim();
+    const debt = D.debts.find(d => d.type==='piutang' && d.person.toLowerCase().includes(nm) && d.remaining>0);
+    if (debt) {
+      const pay = amt>0 ? Math.min(amt,debt.remaining) : debt.remaining;
+      return {action:'pay', debt, amount:pay,
+        preview:`💵 Terima bayar piutang dari <strong>${debt.person}</strong> sebesar <strong style="color:var(--blue)">${fmt(pay)}</strong>`};
+    }
+    return {action:'err', preview:`❌ Piutang tidak ditemukan`};
+  }
+
+  // HUTANG (saya pinjam)
+  if (/hutang|pinjam\s+dari|ngutang|ngutang/i.test(s)) {
+    if (amt > 0) {
+      let nm = s
+        .replace(/hutang\s*(ke|sama|si|ke si|sama si)?\s*/i,'')
+        .replace(/pinjam\s*(dari|ke|sama|si)?\s*/i,'')
+        .replace(/\s*[\d].*$/,'').trim();
+      return {action:'addDebt', type:'hutang', person:nm||'Tidak diketahui', amount:amt,
+        preview:`💸 Hutang ke <strong>${nm||'?'}</strong> sebesar <strong style="color:var(--amber)">${fmt(amt)}</strong>`};
+    }
+  }
+
+  // PIUTANG (orang pinjam ke saya)
+  if (/piutang|pinjem\s+ke\s+|pinjam\s+ke\s+(?!saya)|kasih\s+pinjam/i.test(s)) {
+    if (amt > 0) {
+      let nm = s
+        .replace(/piutang\s*(ke|sama|si|dari)?\s*/i,'')
+        .replace(/kasih\s+pinjam\s*(ke|sama|si)?\s*/i,'')
+        .replace(/\s*[\d].*$/,'').trim();
+      return {action:'addDebt', type:'piutang', person:nm||'Tidak diketahui', amount:amt,
+        preview:`💵 Piutang dari <strong>${nm||'?'}</strong> sebesar <strong style="color:var(--blue)">${fmt(amt)}</strong>`};
+    }
+  }
+
+  // PEMASUKAN
+  if (/masuk|gaji|terima|dapat|bonus|pendapatan|income|transfer\s+masuk|uang\s+masuk/i.test(s)) {
+    if (amt > 0) {
+      const desc = s.replace(/\s*[\d][\d\s,.rbjutamiliarratus]*/i,'').trim() || 'Pemasukan';
+      const cat  = D.cats.find(c=>c.type==='income')?D.cats.find(c=>c.type==='income').name:'Gaji / Penghasilan';
+      return {action:'addTx', type:'income', amount:amt, desc, category:guessCat(s,true),
+        preview:`✅ <strong style="color:var(--green)">Pemasukan</strong>: <em>${desc}</em> <strong>${fmt(amt)}</strong>`};
+    }
+  }
+
+  // PENGELUARAN (default)
+  if (amt > 0) {
+    const desc = s.replace(/\s*[\d][\d\s,.rbjutamiliarratus]*/i,'').trim() || 'Pengeluaran';
+    return {action:'addTx', type:'expense', amount:amt, desc, category:guessCat(s,false),
+      preview:`🔴 <strong style="color:var(--red)">Pengeluaran</strong>: <em>${desc}</em> <strong>${fmt(amt)}</strong>`};
+  }
+
+  return {action:'err', preview:`❓ Tidak mengerti. Coba: <em>"beli bensin 20rb"</em> atau <em>"gaji masuk 5jt"</em>`};
+}
+
+function guessCat(t, isIncome) {
+  if (isIncome) {
+    if (/gaji|salary/i.test(t))   return 'Gaji / Penghasilan';
+    if (/bonus|hadiah/i.test(t))  return 'Bonus / Hadiah';
+    if (/investasi/i.test(t))     return 'Investasi';
+    const inc = D.cats.find(c=>c.type==='income');
+    return inc ? inc.name : 'Gaji / Penghasilan';
+  }
+  if (/makan|minum|kopi|warung|resto|nasi|bakso|ayam|sate|gorengan|jajan|snack/i.test(t)) return 'Makanan & Minuman';
+  if (/bensin|bbm|parkir|ojek|grab|gojek|bis|kereta|taxi|toll|tol|motor|mobil/i.test(t)) return 'Transport';
+  if (/belanja|beli|supermarket|mall|toko|shopee|tokopedia|lazada/i.test(t)) return 'Belanja';
+  if (/game|nonton|bioskop|hiburan|wifi|streaming|netflix|spotify/i.test(t)) return 'Hiburan';
+  if (/dokter|obat|apotek|rs|rumah\s*sakit|kesehatan|vitamin/i.test(t)) return 'Kesehatan';
+  if (/listrik|air|pln|internet|tagihan|cicilan|telpon|hp|pulsa/i.test(t)) return 'Tagihan & Utilitas';
+  if (/sekolah|kursus|buku|pendidikan|kuliah|les/i.test(t)) return 'Pendidikan';
+  return 'Lainnya';
+}
+
+// ═══ SMART INPUT BAR ══════════════════════════
+let pendingCmd = null;
+
+function processSmart() {
+  const inp = document.getElementById('smartInput');
+  const val = inp.value.trim();
+  if (!val) return;
+  const cmd = parseCommand(val);
+  if (!cmd) return;
+  if (cmd.action === 'err') {
+    showSmartResult(cmd.preview, false);
+    return;
+  }
+  pendingCmd = cmd;
+  showSmartResult(cmd.preview, true);
+  inp.value = '';
+}
+
+function showSmartResult(html, showConfirm) {
+  const el = document.getElementById('smartResult');
+  document.getElementById('srPreview').innerHTML = html;
+  document.getElementById('smartResult').querySelector('.sr-btns').style.display = showConfirm ? 'flex' : 'none';
+  if (!showConfirm) {
+    document.getElementById('smartResult').querySelector('.sr-btns').style.display = 'flex';
+    document.querySelector('#smartResult .btn-p').style.display = 'none';
+    document.querySelector('#smartResult .btn-g').textContent = '✕ Tutup';
+  } else {
+    document.querySelector('#smartResult .btn-p').style.display = '';
+    document.querySelector('#smartResult .btn-g').textContent = '✕ Batal';
+  }
+  el.classList.add('show');
+}
+
+function dismissSmart() {
+  document.getElementById('smartResult').classList.remove('show');
+  pendingCmd = null;
+}
+
+async function confirmSmart() {
+  if (!pendingCmd) return;
+  await execCmd(pendingCmd);
+  pendingCmd = null;
+  dismissSmart();
+  render(curPage);
+}
+
+async function execCmd(v) {
+  if (v.action === 'addTx') {
+    const t = {id:uid(), desc:v.desc, amount:v.amount, date:toDay(), category:v.category, type:v.type};
+    D.txs.push(t);
+    await saveItem('txs', t);
+    toast(`✓ ${fmtS(v.amount)} tersimpan`,'ok');
+  } else if (v.action === 'addDebt') {
+    const d = {id:uid(), person:v.person, amount:v.amount, remaining:v.amount, note:'', date:toDay(), type:v.type, payments:[]};
+    D.debts.push(d);
+    await saveItem('debts', d);
+    toast(`✓ ${v.type} ${v.person} tercatat`,'ok');
+  } else if (v.action === 'pay') {
+    const i = D.debts.findIndex(x=>x.id===v.debt.id);
+    D.debts[i].payments.push({id:uid(), amount:v.amount, note:'', date:toDay()});
+    D.debts[i].remaining = Math.max(0, D.debts[i].remaining - v.amount);
+    const txPay = {id:uid(), desc:`Bayar ${v.debt.type==='hutang'?'hutang':'piutang'} ${v.debt.person}`, amount:v.amount, date:toDay(), category:'Pembayaran Hutang', type:v.debt.type==='hutang'?'expense':'income'};
+    D.txs.push(txPay);
+    await saveItem('debts', D.debts[i]);
+    await saveItem('txs', txPay);
+    toast(D.debts[i].remaining===0 ? `✅ ${v.debt.person} lunas!` : `✓ Cicilan ${fmtS(v.amount)} tersimpan`, 'ok');
+  }
+}
+
+// ═══ VOICE ═══════════════════════════════════
+let micOn=false, SR=null;
+function toggleMic() {
+  micOn ? stopMic() : startMic();
+}
+function startMic() {
+  const SRC = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SRC) { toast('Gunakan Chrome untuk fitur suara','err'); return; }
+  SR = new SRC(); SR.lang='id-ID'; SR.continuous=false; SR.interimResults=true;
+  micOn = true;
+  document.getElementById('micBtn').classList.add('on');
+  document.getElementById('vHint').classList.add('show');
+  document.getElementById('vHintTxt').textContent = 'Mendengarkan...';
+  document.getElementById('vLive').textContent = '';
+  SR.onresult = e => {
+    const txt = Array.from(e.results).map(r=>r[0].transcript).join('');
+    document.getElementById('vLive').textContent = '"'+txt+'"';
+    if (e.results[0].isFinal) {
+      document.getElementById('smartInput').value = txt;
+      stopMic();
+      processSmart();
+    }
+  };
+  SR.onerror = e => { toast('Error mic: '+e.error,'err'); stopMic(); };
+  SR.onend   = stopMic;
+  SR.start();
+}
+function stopMic() {
+  micOn = false;
+  document.getElementById('micBtn').classList.remove('on');
+  document.getElementById('vHint').classList.remove('show');
+  if (SR) { try{SR.stop();}catch(e){} SR=null; }
+}
+
+// ═══ THEME ════════════════════════════════════
+function applyTheme(t) {
   document.documentElement.setAttribute('data-theme',t);
-  document.getElementById('themeColor').content=t==='dark'?'#0d1117':'#f6f8fa';
-  if(window._chart){window._chart.destroy();window._chart=null;}
-  if(curPage==='dash')setTimeout(buildChart,60);
+  document.getElementById('themeColor').content = t==='dark'?'#0d1117':'#f6f8fa';
+  if (window._chart) { window._chart.destroy(); window._chart=null; }
+  if (curPage==='dash') setTimeout(buildChart,60);
 }
 
 // ═══ NAVIGATION ══════════════════════════════
 let curPage='dash';
-function go(p){
+function go(p) {
   document.getElementById('pg-'+curPage).classList.remove('active');
   document.querySelectorAll('.ni').forEach(el=>el.classList.toggle('on',el.dataset.pg===p));
   curPage=p;
   document.getElementById('pg-'+p).classList.add('active');
   render(p);
 }
-function render(p){({dash:rDash,tx:rTx,debt:rDebt,rep:rRep,set:rSet})[p]?.();}
+function render(p) { ({dash:rDash,tx:rTx,debt:rDebt,rep:rRep,set:rSet})[p]?.(); }
 
-// ═══ STATS ═══════════════════════════════════
-function calcStats(arr){
-  arr=arr||D.txs;
+// ═══ STATS ════════════════════════════════════
+function calcStats(arr) {
+  arr = arr||D.txs;
   const inc=arr.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
   const exp=arr.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
   const hut=D.debts.filter(d=>d.type==='hutang').reduce((s,d)=>s+d.remaining,0);
   const piu=D.debts.filter(d=>d.type==='piutang').reduce((s,d)=>s+d.remaining,0);
-  return{inc,exp,bal:inc-exp,hut,piu};
+  return {inc,exp,bal:inc-exp,hut,piu};
 }
 
-// ═══ DASHBOARD ═══════════════════════════════
-function rDash(){
-  const s=calcStats(),p=D.cfg.profile||{};
+// ═══ DASHBOARD ════════════════════════════════
+function rDash() {
+  const s=calcStats(), p=D.cfg.profile||{};
   const recent=[...D.txs].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
-  const debtCount=D.debts.filter(d=>d.remaining>0).length;
-  document.getElementById('debtDot').classList.toggle('show',debtCount>0);
-
+  document.getElementById('debtDot').classList.toggle('show', D.debts.filter(d=>d.remaining>0).length>0);
   document.getElementById('pg-dash').innerHTML=`
   <div class="ph">
-    <div>
-      <div class="pt">Halo, ${p.name||'Pengguna'} ${p.avatar||'👋'}</div>
-      <div class="ps">${new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})}</div>
-    </div>
+    <div><div class="pt">Halo, ${p.name||'Pengguna'} ${p.avatar||'👋'}</div>
+    <div class="ps">${new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})}</div></div>
     <button class="btn btn-p btn-sm" onclick="openAddTx()">＋ Catat</button>
   </div>
   <div class="hero fu">
@@ -734,18 +868,15 @@ function rDash(){
   </div>
   <div class="dw-row">
     <div class="dw" onclick="go('debt')">
-      <div class="dw-ico" style="background:var(--amber-d)">💸</div>
-      <div class="dw-lbl">Total Hutang</div>
-      <div class="dw-val" style="color:var(--amber)">${fmtS(s.hut)}</div>
+      <div class="dw-ico" style="background:var(--ad)">💸</div>
+      <div class="dw-lbl">Total Hutang</div><div class="dw-val" style="color:var(--amber)">${fmtS(s.hut)}</div>
     </div>
     <div class="dw" onclick="go('debt')">
-      <div class="dw-ico" style="background:var(--blue-d)">💵</div>
-      <div class="dw-lbl">Total Piutang</div>
-      <div class="dw-val" style="color:var(--blue)">${fmtS(s.piu)}</div>
+      <div class="dw-ico" style="background:var(--bd)">💵</div>
+      <div class="dw-lbl">Total Piutang</div><div class="dw-val" style="color:var(--blue)">${fmtS(s.piu)}</div>
     </div>
   </div>
-  <div class="sec">
-    <div class="sl">Pengeluaran per Kategori</div>
+  <div class="sec"><div class="sl">Pengeluaran per Kategori</div>
     <div class="card"><div class="chart-wrap"><canvas id="dashChart"></canvas></div></div>
   </div>
   <div class="sec">
@@ -759,84 +890,70 @@ function rDash(){
   </div>`;
   setTimeout(buildChart,60);
 }
-
-function txRow(t){
+function txRow(t) {
   return`<div class="txi" onclick="editTx('${t.id}')">
-    <div class="txi-ico" style="background:${t.type==='income'?'var(--green-d)':'var(--red-d)'}">${catEmoji(t.category)}</div>
+    <div class="txi-ico" style="background:${t.type==='income'?'var(--gd)':'var(--rd)'}">${catEmoji(t.category)}</div>
     <div class="txi-info"><div class="txi-name">${t.desc}</div><div class="txi-meta">${fmtD(t.date)} · ${t.category}</div></div>
     <div class="txi-amt" style="color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'＋':'－'}${fmtS(t.amount)}</div>
   </div>`;
 }
-
-function buildChart(){
-  const ctx=document.getElementById('dashChart');if(!ctx)return;
+function buildChart() {
+  const ctx=document.getElementById('dashChart'); if(!ctx)return;
   if(window._chart){window._chart.destroy();window._chart=null;}
-  const exps=D.txs.filter(t=>t.type==='expense'),map={};
-  exps.forEach(t=>map[t.category]=(map[t.category]||0)+t.amount);
+  const map={};
+  D.txs.filter(t=>t.type==='expense').forEach(t=>map[t.category]=(map[t.category]||0)+t.amount);
   if(!Object.keys(map).length){ctx.parentElement.innerHTML='<div class="empty"><div class="empty-i">📊</div><p>Belum ada pengeluaran</p></div>';return;}
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
-  const lblC=dark?'#8b949e':'#57606a';
   const labels=Object.keys(map),vals=Object.values(map);
   const clrs=['#58a6ff','#f85149','#e3a008','#3fb950','#bc8cff','#fd8458','#39d353','#f778ba','#56d3fd','#e2b34b'];
-  window._chart=new Chart(ctx,{
-    type:'doughnut',
+  window._chart=new Chart(ctx,{type:'doughnut',
     data:{labels,datasets:[{data:vals,backgroundColor:clrs.slice(0,labels.length),borderWidth:0,hoverOffset:5}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{color:lblC,font:{size:11,family:'Plus Jakarta Sans'},boxWidth:9,padding:11}},
-      tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)}`}}},cutout:'63%'}
-  });
+      plugins:{legend:{position:'bottom',labels:{color:dark?'#8b949e':'#57606a',font:{size:11,family:'Plus Jakarta Sans'},boxWidth:9,padding:11}},
+      tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)}`}}},cutout:'63%'}});
 }
 
-// ═══ TRANSACTIONS ═════════════════════════════
+// ═══ TRANSACTIONS ════════════════════════════
 let txF='all',txTime='all',txFrom='',txTo='';
-function filteredTxs(){
+function filteredTxs() {
   let arr=[...D.txs].sort((a,b)=>b.date.localeCompare(a.date));
-  if(txF!=='all')arr=arr.filter(t=>t.type===txF);
+  if(txF!=='all') arr=arr.filter(t=>t.type===txF);
   const nd=toDay();
-  if(txTime==='today')arr=arr.filter(t=>t.date===nd);
+  if(txTime==='today') arr=arr.filter(t=>t.date===nd);
   else if(txTime==='week'){const w=new Date();w.setDate(w.getDate()-6);arr=arr.filter(t=>t.date>=w.toISOString().split('T')[0]&&t.date<=nd);}
-  else if(txTime==='month')arr=arr.filter(t=>t.date.startsWith(nd.slice(0,7)));
+  else if(txTime==='month') arr=arr.filter(t=>t.date.startsWith(nd.slice(0,7)));
   else if(txTime==='lastmonth'){const lm=new Date();lm.setDate(1);lm.setMonth(lm.getMonth()-1);arr=arr.filter(t=>t.date.startsWith(lm.toISOString().slice(0,7)));}
-  else if(txTime==='custom'&&txFrom&&txTo)arr=arr.filter(t=>t.date>=txFrom&&t.date<=txTo);
+  else if(txTime==='custom'&&txFrom&&txTo) arr=arr.filter(t=>t.date>=txFrom&&t.date<=txTo);
   return arr;
 }
-function rTx(){
-  const arr=filteredTxs(),s=calcStats(arr),showDR=txTime==='custom';
+function rTx() {
+  const arr=filteredTxs(), s=calcStats(arr), showDR=txTime==='custom';
   document.getElementById('pg-tx').innerHTML=`
   <div class="ph"><div><div class="pt">Transaksi</div></div>
     <button class="btn btn-p btn-sm" onclick="openAddTx()">＋ Tambah</button>
   </div>
   <div style="margin-top:14px">
     <div class="chips">${[['all','Semua'],['today','Hari Ini'],['week','7 Hari'],['month','Bulan Ini'],['lastmonth','Bln Lalu'],['custom','📅 Custom']].map(([v,l])=>
-      `<button class="chip${txTime===v?' c-blue':''}" onclick="setTxTime('${v}')">${l}</button>`).join('')}</div>
+      `<button class="chip${txTime===v?' cb':''}" onclick="setTxTime('${v}')">${l}</button>`).join('')}</div>
   </div>
   <div class="dr${showDR?' open':''}" id="drPanel">
     <input type="date" id="drFrom" value="${txFrom}" onchange="txFrom=this.value;rTx()" style="color:var(--text)">
-    <span class="dr-sep">→</span>
+    <span style="color:var(--text3);font-size:13px;flex-shrink:0">→</span>
     <input type="date" id="drTo" value="${txTo}" onchange="txTo=this.value;rTx()" style="color:var(--text)">
   </div>
   <div class="chips">${[['all','Semua'],['income','💚 Masuk'],['expense','🔴 Keluar']].map(([v,l])=>
-    `<button class="chip${txF===v?v==='all'?' c-blue':v==='income'?' c-green':' c-red':''}" onclick="setTxF('${v}')">${l}</button>`).join('')}</div>
+    `<button class="chip${txF===v?v==='income'?' cg':v==='expense'?' cr':' cb':''}" onclick="setTxF('${v}')">${l}</button>`).join('')}</div>
   <div class="smini">
-    <div class="smini-item" style="background:var(--green-d)">
-      <div style="font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Masuk</div>
-      <div style="font-size:15px;font-weight:800;color:var(--green);margin-top:3px">${fmtS(s.inc)}</div>
-    </div>
-    <div class="smini-item" style="background:var(--red-d)">
-      <div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Keluar</div>
-      <div style="font-size:15px;font-weight:800;color:var(--red);margin-top:3px">${fmtS(s.exp)}</div>
-    </div>
-    <div class="smini-item" style="background:var(--card);border:1px solid var(--border)">
-      <div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Net</div>
-      <div style="font-size:15px;font-weight:800;color:${s.bal>=0?'var(--blue)':'var(--red)'};margin-top:3px">${fmtS(s.bal)}</div>
-    </div>
+    <div class="smini-i" style="background:var(--gd)"><div style="font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Masuk</div><div style="font-size:15px;font-weight:800;color:var(--green);margin-top:3px">${fmtS(s.inc)}</div></div>
+    <div class="smini-i" style="background:var(--rd)"><div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Keluar</div><div style="font-size:15px;font-weight:800;color:var(--red);margin-top:3px">${fmtS(s.exp)}</div></div>
+    <div class="smini-i" style="background:var(--card);border:1px solid var(--border)"><div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Net</div><div style="font-size:15px;font-weight:800;color:${s.bal>=0?'var(--blue)':'var(--red)'};margin-top:3px">${fmtS(s.bal)}</div></div>
   </div>
   <div style="padding:0 18px;margin-bottom:8px;font-size:12px;color:var(--text3);font-weight:600">${arr.length} transaksi</div>
   <div style="padding:0 18px">
   ${arr.length===0?`<div class="empty"><div class="empty-i">📭</div><p>Tidak ada transaksi di periode ini</p></div>`
   :arr.map(t=>`
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)">
-      <div class="txi-ico" style="background:${t.type==='income'?'var(--green-d)':'var(--red-d)'};flex-shrink:0">${catEmoji(t.category)}</div>
+      <div class="txi-ico" style="background:${t.type==='income'?'var(--gd)':'var(--rd)'};flex-shrink:0">${catEmoji(t.category)}</div>
       <div style="flex:1;min-width:0">
         <div style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.desc}</div>
         <div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtD(t.date)} · ${t.category}</div>
@@ -856,11 +973,11 @@ function setTxF(v){txF=v;rTx();}
 
 // ═══ DEBTS ════════════════════════════════════
 let debtTab='hutang';
-function rDebt(){
+function rDebt() {
   const hl=D.debts.filter(d=>d.type==='hutang'),pl=D.debts.filter(d=>d.type==='piutang');
   const dCard=d=>{
     const pct=Math.round((1-d.remaining/d.amount)*100);
-    const isH=d.type==='hutang',col=isH?'var(--amber)':'var(--blue)',cbg=isH?'var(--amber-d)':'var(--blue-d)';
+    const isH=d.type==='hutang',col=isH?'var(--amber)':'var(--blue)',cbg=isH?'var(--ad)':'var(--bd)';
     return`<div class="dc fu">
       <div class="dc-head">
         <div><div class="dc-name">${d.person}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${d.note||'—'} · ${fmtD(d.date)}</div></div>
@@ -896,7 +1013,7 @@ function rDebt(){
 function setDTab(t){debtTab=t;rDebt();}
 
 // ═══ REPORTS ══════════════════════════════════
-function rRep(){
+function rRep() {
   const s=calcStats(),mMap={};
   D.txs.forEach(t=>{const m=t.date.slice(0,7);if(!mMap[m])mMap[m]={inc:0,exp:0};mMap[m][t.type==='income'?'inc':'exp']+=t.amount;});
   const months=Object.keys(mMap).sort().slice(-6).reverse();
@@ -906,20 +1023,16 @@ function rRep(){
     <button class="exp-btn" onclick="expXlsx()">📊 Excel</button>
     <button class="exp-btn" onclick="expPdf()">📄 PDF</button>
   </div>
-  <div class="sec">
-    <div class="sl">Ringkasan</div>
-    <div class="card">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
-        ${[['Pemasukan',s.inc,'var(--green)'],['Pengeluaran',s.exp,'var(--red)'],['Saldo',s.bal,s.bal>=0?'var(--blue)':'var(--red)'],['Transaksi',D.txs.length,'var(--text)']].map(([l,v,c])=>`
-          <div style="background:var(--bg3);border-radius:11px;padding:13px">
-            <div style="font-size:11px;color:var(--text3);font-weight:600">${l}</div>
-            <div style="font-size:17px;font-weight:800;color:${c};margin-top:4px">${typeof v==='number'&&l!=='Transaksi'?fmtS(v):v}</div>
-          </div>`).join('')}
-      </div>
-    </div>
+  <div class="sec"><div class="sl">Ringkasan</div>
+    <div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+      ${[['Pemasukan',s.inc,'var(--green)'],['Pengeluaran',s.exp,'var(--red)'],['Saldo',s.bal,s.bal>=0?'var(--blue)':'var(--red)'],['Transaksi',D.txs.length,'var(--text)']].map(([l,v,c])=>`
+        <div style="background:var(--bg3);border-radius:11px;padding:13px">
+          <div style="font-size:11px;color:var(--text3);font-weight:600">${l}</div>
+          <div style="font-size:17px;font-weight:800;color:${c};margin-top:4px">${typeof v==='number'&&l!=='Transaksi'?fmtS(v):v}</div>
+        </div>`).join('')}
+    </div></div>
   </div>
-  <div class="sec">
-    <div class="sl">6 Bulan Terakhir</div>
+  <div class="sec"><div class="sl">6 Bulan Terakhir</div>
     ${months.length===0?`<div class="empty"><div class="empty-i">📅</div><p>Belum ada data</p></div>`
     :months.map(m=>{const d=mMap[m],net=d.inc-d.exp;
       return`<div class="card" style="margin-bottom:10px">
@@ -932,126 +1045,109 @@ function rRep(){
   </div>`;
 }
 
-// ═══ SETTINGS PAGE ════════════════════════════
-function rSet(){
+// ═══ SETTINGS ═════════════════════════════════
+function rSet() {
   const cfg=D.cfg,p=cfg.profile||{},th=cfg.theme||'dark';
   document.getElementById('pg-set').innerHTML=`
   <div class="ph"><div><div class="pt">Setelan</div></div></div>
-  <div class="ss">
-    <div class="ss-t">Profil</div>
-    <div class="sg">
-      <div class="sr" onclick="openProf()">
-        <div style="width:40px;height:40px;border-radius:50%;background:var(--blue-d);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${p.avatar||'👤'}</div>
-        <div class="sr-c"><div class="sr-lbl">${p.name||'Pengguna'}</div><div class="sr-sub">${p.bio||'Tap untuk edit profil'}</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
+  <div class="ss"><div class="ss-t">Profil</div><div class="sg">
+    <div class="sr" onclick="openProf()">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--bd);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${p.avatar||'👤'}</div>
+      <div class="sr-c"><div class="sr-lbl">${p.name||'Pengguna'}</div><div class="sr-sub">${p.bio||'Tap untuk edit profil'}</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
-  </div>
-  <div class="ss">
-    <div class="ss-t">Tampilan</div>
-    <div class="sg">
-      <div class="sr" onclick="cycleTheme()">
-        <div class="sr-ico" style="background:var(--purple-d)">🎨</div>
-        <div class="sr-c"><div class="sr-lbl">Tema Warna</div><div class="sr-sub">${{dark:'🌙 Mode Gelap',light:'☀️ Mode Terang'}[th]}</div></div>
-        <div class="sr-r"><span class="badge-tag">${{dark:'Gelap',light:'Terang'}[th]}</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="sr" onclick="openCurr()">
-        <div class="sr-ico" style="background:var(--green-d)">💱</div>
-        <div class="sr-c"><div class="sr-lbl">Mata Uang &amp; Format</div><div class="sr-sub">${cfg.currency||'IDR'} · ${cfg.numFmt==='id'?'Format Indonesia':'Format Internasional'}</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
+  </div></div>
+  <div class="ss"><div class="ss-t">Tampilan</div><div class="sg">
+    <div class="sr" onclick="cycleTheme()">
+      <div class="sr-ico" style="background:var(--pd)">🎨</div>
+      <div class="sr-c"><div class="sr-lbl">Tema Warna</div><div class="sr-sub">${{dark:'🌙 Mode Gelap',light:'☀️ Mode Terang'}[th]}</div></div>
+      <div class="sr-r"><span class="badge-tag">${{dark:'Gelap',light:'Terang'}[th]}</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
-  </div>
-  <div class="ss">
-    <div class="ss-t">Transaksi</div>
-    <div class="sg">
-      <div class="sr" onclick="openCats()">
-        <div class="sr-ico" style="background:var(--amber-d)">🏷️</div>
-        <div class="sr-c"><div class="sr-lbl">Kelola Kategori</div><div class="sr-sub">${D.cats.length} kategori tersimpan · tap untuk edit</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
+    <div class="sr" onclick="openCurr()">
+      <div class="sr-ico" style="background:var(--gd)">💱</div>
+      <div class="sr-c"><div class="sr-lbl">Mata Uang &amp; Format</div><div class="sr-sub">${cfg.currency||'IDR'} · ${cfg.numFmt==='id'?'Format Indonesia':'Format Internasional'}</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
-  </div>
-  <div class="ss">
-    <div class="ss-t">Data &amp; Backup</div>
-    <div class="sg">
-      <div class="sr" onclick="openM('mBackup')">
-        <div class="sr-ico" style="background:var(--blue-d)">💾</div>
-        <div class="sr-c"><div class="sr-lbl">Backup &amp; Restore</div><div class="sr-sub">Ekspor / impor data JSON</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="sr" onclick="expXlsx()">
-        <div class="sr-ico" style="background:var(--green-d)">📊</div>
-        <div class="sr-c"><div class="sr-lbl">Ekspor Excel (.xlsx)</div><div class="sr-sub">Unduh semua data transaksi</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="sr" onclick="expPdf()">
-        <div class="sr-ico" style="background:var(--red-d)">📄</div>
-        <div class="sr-c"><div class="sr-lbl">Ekspor PDF</div><div class="sr-sub">Cetak laporan keuangan</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
+  </div></div>
+  <div class="ss"><div class="ss-t">Transaksi</div><div class="sg">
+    <div class="sr" onclick="openCats()">
+      <div class="sr-ico" style="background:var(--ad)">🏷️</div>
+      <div class="sr-c"><div class="sr-lbl">Kelola Kategori</div><div class="sr-sub">${D.cats.length} kategori · tap untuk edit</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
-  </div>
-  <div class="ss">
-    <div class="ss-t">PWA &amp; Instalasi</div>
-    <div class="sg">
-      <div class="sr" onclick="triggerInstall()">
-        <div class="sr-ico" style="background:var(--blue-d)">📲</div>
-        <div class="sr-c"><div class="sr-lbl">Install ke HP</div><div class="sr-sub">Tambahkan ke layar utama Android</div></div>
-        <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="sr" style="cursor:default">
-        <div class="sr-ico" style="background:var(--green-d)">📡</div>
-        <div class="sr-c"><div class="sr-lbl">Mode Offline</div><div class="sr-sub">App tetap berjalan tanpa internet</div></div>
-        <div class="sr-r"><span class="badge-tag" style="color:var(--green);background:var(--green-d)">Aktif</span></div>
-      </div>
+  </div></div>
+  <div class="ss"><div class="ss-t">Data &amp; Keamanan</div><div class="sg">
+    <div class="sr" style="cursor:default">
+      <div class="sr-ico" style="background:var(--gd)">🔒</div>
+      <div class="sr-c"><div class="sr-lbl">Penyimpanan IndexedDB</div><div class="sr-sub">Data aman, tidak hilang saat clear cache</div></div>
+      <div class="sr-r"><span class="badge-tag" style="color:var(--green);background:var(--gd)">Aktif</span></div>
     </div>
-  </div>
-  <div class="ss" style="margin-bottom:8px">
-    <div class="ss-t">Tentang</div>
-    <div class="sg">
-      <div class="sr" style="cursor:default">
-        <div class="sr-ico" style="background:var(--blue-d)">💼</div>
-        <div class="sr-c"><div class="sr-lbl">DompetKu v2.1 PWA</div><div class="sr-sub">Financial Tracker · Data lokal aman di HP</div></div>
-      </div>
+    <div class="sr" onclick="openM('mBackup')">
+      <div class="sr-ico" style="background:var(--bd)">💾</div>
+      <div class="sr-c"><div class="sr-lbl">Backup &amp; Restore</div><div class="sr-sub">Ekspor / impor data JSON</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
-  </div>`;
+    <div class="sr" onclick="expXlsx()">
+      <div class="sr-ico" style="background:var(--gd)">📊</div>
+      <div class="sr-c"><div class="sr-lbl">Ekspor Excel</div><div class="sr-sub">Unduh semua data ke .xlsx</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+    <div class="sr" onclick="expPdf()">
+      <div class="sr-ico" style="background:var(--rd)">📄</div>
+      <div class="sr-c"><div class="sr-lbl">Ekspor PDF</div><div class="sr-sub">Cetak laporan keuangan</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+  </div></div>
+  <div class="ss"><div class="ss-t">PWA</div><div class="sg">
+    <div class="sr" onclick="triggerInstall()">
+      <div class="sr-ico" style="background:var(--bd)">📲</div>
+      <div class="sr-c"><div class="sr-lbl">Install ke HP</div><div class="sr-sub">Tambahkan ke layar utama Android</div></div>
+      <div class="sr-r"><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+    <div class="sr" style="cursor:default">
+      <div class="sr-ico" style="background:var(--gd)">📡</div>
+      <div class="sr-c"><div class="sr-lbl">Mode Offline</div><div class="sr-sub">App tetap berjalan tanpa internet</div></div>
+      <div class="sr-r"><span class="badge-tag" style="color:var(--green);background:var(--gd)">Aktif</span></div>
+    </div>
+  </div></div>
+  <div class="ss" style="margin-bottom:8px"><div class="ss-t">Tentang</div><div class="sg">
+    <div class="sr" style="cursor:default">
+      <div class="sr-ico" style="background:var(--bd)">💼</div>
+      <div class="sr-c"><div class="sr-lbl">DompetKu v3.0 PWA</div><div class="sr-sub">IndexedDB · Input teks &amp; suara · Offline</div></div>
+    </div>
+  </div></div>`;
 }
 
 // ═══ THEME ════════════════════════════════════
-function cycleTheme(){
+async function cycleTheme() {
   const t=D.cfg.theme==='dark'?'light':'dark';
-  D.cfg.theme=t;saveDB();applyTheme(t);rSet();
+  D.cfg.theme=t; await saveItem('cfg',D.cfg); applyTheme(t); rSet();
   toast({dark:'🌙 Tema Gelap aktif',light:'☀️ Tema Terang aktif'}[t],'ok');
 }
 
 // ═══ PROFILE ══════════════════════════════════
 const AVS=['👤','😊','😎','🧑','👩','🧑‍💼','👨‍💼','🤑','🎯','🦊','🐼','🦁','🐉','🦅'];
 let avIdx=0;
-function openProf(){
+function openProf() {
   const p=D.cfg.profile||{};
   document.getElementById('profName').value=p.name||'';
   document.getElementById('profBio').value=p.bio||'';
-  avIdx=AVS.indexOf(p.avatar||'👤');if(avIdx<0)avIdx=0;
+  avIdx=AVS.indexOf(p.avatar||'👤'); if(avIdx<0)avIdx=0;
   document.getElementById('profAv').textContent=AVS[avIdx];
   openM('mProf');
 }
 function cycleAv(){avIdx=(avIdx+1)%AVS.length;document.getElementById('profAv').textContent=AVS[avIdx];}
-function saveProf(){
+async function saveProf() {
   D.cfg.profile={name:document.getElementById('profName').value.trim()||'Pengguna',bio:document.getElementById('profBio').value.trim(),avatar:AVS[avIdx]};
-  saveDB();closeM('mProf');rSet();toast('Profil disimpan ✓','ok');
+  await saveItem('cfg',D.cfg); closeM('mProf'); rSet(); toast('Profil disimpan ✓','ok');
 }
 
 // ═══ CURRENCY ═════════════════════════════════
-function openCurr(){
-  document.getElementById('currSel').value=D.cfg.currency||'IDR';
-  document.getElementById('numFmt').value=D.cfg.numFmt||'id';
-  openM('mCurr');
-}
-function saveCurr(){
+function openCurr(){document.getElementById('currSel').value=D.cfg.currency||'IDR';document.getElementById('numFmt').value=D.cfg.numFmt||'id';openM('mCurr');}
+async function saveCurr(){
   D.cfg.currency=document.getElementById('currSel').value;
   D.cfg.numFmt=document.getElementById('numFmt').value;
-  saveDB();closeM('mCurr');rSet();if(curPage!=='set')render(curPage);
+  await saveItem('cfg',D.cfg); closeM('mCurr'); rSet(); if(curPage!=='set')render(curPage);
   toast('Format diperbarui ✓','ok');
 }
 
@@ -1076,41 +1172,38 @@ function addCat(){D.cats.push({id:uid(),name:'Kategori Baru',emoji:'📌',type:'
 function updCatName(id,v){const c=D.cats.find(x=>x.id===id);if(c)c.name=v.trim()||c.name;}
 function updCatType(id,v){const c=D.cats.find(x=>x.id===id);if(c)c.type=v;}
 function delCat(id){if(D.cats.length<=1){toast('Minimal 1 kategori','err');return;}D.cats=D.cats.filter(c=>c.id!==id);renderCatList();}
-function saveCats(){saveDB();closeM('mCats');rSet();toast(`${D.cats.length} kategori disimpan ✓`,'ok');}
-function openEmoji(catId){
-  editEmojiId=catId;
-  document.getElementById('emojiGrid').innerHTML=ALL_EMOJIS.map(e=>`<div class="emj-cell" onclick="pickEmoji('${e}')">${e}</div>`).join('');
-  openM('mEmoji');
-}
+async function saveCats(){await saveAll('cats');closeM('mCats');rSet();toast(`${D.cats.length} kategori disimpan ✓`,'ok');}
+function openEmoji(catId){editEmojiId=catId;document.getElementById('emojiGrid').innerHTML=ALL_EMOJIS.map(e=>`<div class="emj-cell" onclick="pickEmoji('${e}')">${e}</div>`).join('');openM('mEmoji');}
 function pickEmoji(e){const c=D.cats.find(x=>x.id===editEmojiId);if(c){c.emoji=e;renderCatList();}closeM('mEmoji');}
 
 // ═══ BACKUP ═══════════════════════════════════
-function doBackup(){
-  const blob=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=`DompetKu_backup_${toDay()}.json`;a.click();
+async function doBackup(){
+  const blob=new Blob([JSON.stringify({txs:D.txs,debts:D.debts,cats:D.cats,cfg:D.cfg},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`DompetKu_backup_${toDay()}.json`;a.click();
   toast('💾 Backup diunduh','ok');
 }
-function doRestore(e){
+async function doRestore(e){
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{
+  r.onload=async ev=>{
     try{
       const d=JSON.parse(ev.target.result);
       if(!d.txs&&!d.transactions){toast('File tidak valid','err');return;}
-      if(!confirm('Restore akan mengganti semua data saat ini. Lanjutkan?'))return;
-      D={txs:d.txs||d.transactions||[],debts:d.debts||[],cats:d.cats||d.categories||DEF_CATS,cfg:d.cfg||d.settings||DEF_CFG};
-      saveDB();closeM('mBackup');render(curPage);applyTheme(D.cfg.theme||'dark');
+      if(!confirm('Restore akan mengganti semua data. Lanjutkan?'))return;
+      D={txs:d.txs||d.transactions||[],debts:d.debts||[],cats:d.cats||d.categories||DEF_CATS,cfg:{...DEF_CFG,...(d.cfg||d.settings||{}),id:'cfg1'}};
+      await saveAll('txs');await saveAll('debts');await saveAll('cats');await saveItem('cfg',D.cfg);
+      closeM('mBackup');render(curPage);applyTheme(D.cfg.theme||'dark');
       toast('📂 Data dipulihkan ✓','ok');
     }catch{toast('File tidak valid','err');}
   };
   r.readAsText(f);
 }
-function clearAll(){
+async function clearAll(){
   if(!confirm('Hapus SEMUA data?'))return;
-  if(!confirm('Yakin? Semua transaksi dan hutang akan hilang permanen.'))return;
-  D={txs:[],debts:[],cats:DEF_CATS,cfg:D.cfg};saveDB();closeM('mBackup');render(curPage);
-  toast('Semua data dihapus','info');
+  if(!confirm('Yakin? Semua transaksi dan hutang akan hilang.'))return;
+  D={txs:[],debts:[],cats:DEF_CATS,cfg:{...D.cfg}};
+  await saveAll('txs');await saveAll('debts');await saveAll('cats');
+  closeM('mBackup');render(curPage);toast('Semua data dihapus','info');
 }
 
 // ═══ EXPORT ═══════════════════════════════════
@@ -1148,23 +1241,17 @@ function fillCats(type){
   sel.innerHTML=D.cats.filter(c=>c.type===type||c.type==='both').map(c=>`<option value="${c.name}">${c.emoji} ${c.name}</option>`).join('');
 }
 function openAddTx(){
-  document.getElementById('txEId').value='';
-  document.getElementById('txDesc').value='';
-  document.getElementById('txAmt').value='';
-  document.getElementById('txDate').value=toDay();
+  document.getElementById('txEId').value='';document.getElementById('txDesc').value='';
+  document.getElementById('txAmt').value='';document.getElementById('txDate').value=toDay();
   document.getElementById('mTxTitle').textContent='Tambah Transaksi';
   setTxType('income');openM('mTx');
 }
 function editTx(id){
   const t=D.txs.find(x=>x.id===id);if(!t)return;
-  document.getElementById('txEId').value=id;
-  document.getElementById('txDesc').value=t.desc;
-  document.getElementById('txAmt').value=t.amount;
-  document.getElementById('txDate').value=t.date;
+  document.getElementById('txEId').value=id;document.getElementById('txDesc').value=t.desc;
+  document.getElementById('txAmt').value=t.amount;document.getElementById('txDate').value=t.date;
   document.getElementById('mTxTitle').textContent='Edit Transaksi';
-  setTxType(t.type);
-  setTimeout(()=>document.getElementById('txCat').value=t.category,10);
-  openM('mTx');
+  setTxType(t.type);setTimeout(()=>document.getElementById('txCat').value=t.category,10);openM('mTx');
 }
 function setTxType(t){
   curTxType=t;
@@ -1172,7 +1259,7 @@ function setTxType(t){
   document.getElementById('tt-ex').className='tt'+(t==='expense'?' ae':'');
   fillCats(t);
 }
-function saveTx(){
+async function saveTx(){
   const desc=document.getElementById('txDesc').value.trim();
   const amt=parseFloat(document.getElementById('txAmt').value);
   const date=document.getElementById('txDate').value;
@@ -1180,11 +1267,20 @@ function saveTx(){
   const eid=document.getElementById('txEId').value;
   if(!desc||!amt||!date){toast('Isi semua field','err');return;}
   if(amt<=0){toast('Jumlah harus > 0','err');return;}
-  if(eid){const i=D.txs.findIndex(t=>t.id===eid);if(i>=0)D.txs[i]={...D.txs[i],desc,amount:amt,date,category:cat,type:curTxType};toast('Diperbarui ✓','ok');}
-  else{D.txs.push({id:uid(),desc,amount:amt,date,category:cat,type:curTxType});toast('Tersimpan ✓','ok');}
-  saveDB();closeM('mTx');render(curPage);
+  if(eid){
+    const i=D.txs.findIndex(t=>t.id===eid);
+    if(i>=0){D.txs[i]={...D.txs[i],desc,amount:amt,date,category:cat,type:curTxType};await saveItem('txs',D.txs[i]);}
+    toast('Diperbarui ✓','ok');
+  }else{
+    const t={id:uid(),desc,amount:amt,date,category:cat,type:curTxType};
+    D.txs.push(t);await saveItem('txs',t);toast('Tersimpan ✓','ok');
+  }
+  closeM('mTx');render(curPage);
 }
-function delTx(id){if(!confirm('Hapus transaksi ini?'))return;D.txs=D.txs.filter(t=>t.id!==id);saveDB();render(curPage);toast('Dihapus','info');}
+async function delTx(id){
+  if(!confirm('Hapus transaksi ini?'))return;
+  D.txs=D.txs.filter(t=>t.id!==id);await deleteItem('txs',id);render(curPage);toast('Dihapus','info');
+}
 
 // ═══ DEBT CRUD ════════════════════════════════
 let curDType='hutang';
@@ -1198,27 +1294,30 @@ function setDType(t){
   document.getElementById('tt-p').className='tt'+(t==='piutang'?' ap':'');
   document.getElementById('dPersonLbl').textContent=t==='hutang'?'Saya hutang ke siapa':'Siapa yang pinjam ke saya';
 }
-function saveDebt(){
+async function saveDebt(){
   const person=document.getElementById('dPerson').value.trim();
   const amt=parseFloat(document.getElementById('dAmt').value);
   const note=document.getElementById('dNote').value.trim();
   const date=document.getElementById('dDate').value;
   if(!person||!amt){toast('Isi nama dan jumlah','err');return;}
-  D.debts.push({id:uid(),person,amount:amt,remaining:amt,note,date,type:curDType,payments:[]});
-  saveDB();closeM('mDebt');render(curPage);toast(`${curDType==='hutang'?'Hutang':'Piutang'} ke ${person} tercatat ✓`,'ok');
+  const d={id:uid(),person,amount:amt,remaining:amt,note,date,type:curDType,payments:[]};
+  D.debts.push(d);await saveItem('debts',d);
+  closeM('mDebt');render(curPage);toast(`${curDType==='hutang'?'Hutang':'Piutang'} ke ${person} tercatat ✓`,'ok');
 }
-function delDebt(id){if(!confirm('Hapus data ini?'))return;D.debts=D.debts.filter(d=>d.id!==id);saveDB();render(curPage);toast('Dihapus','info');}
+async function delDebt(id){
+  if(!confirm('Hapus data ini?'))return;
+  D.debts=D.debts.filter(d=>d.id!==id);await deleteItem('debts',id);render(curPage);toast('Dihapus','info');
+}
 function openPay(id){
   const d=D.debts.find(x=>x.id===id);if(!d)return;
   document.getElementById('payDId').value=id;
-  document.getElementById('payAmt').value='';
-  document.getElementById('payNote').value='';
+  document.getElementById('payAmt').value='';document.getElementById('payNote').value='';
   document.getElementById('payDate').value=toDay();
   document.getElementById('mPayTitle').textContent=`Cicil ${d.type==='hutang'?'Hutang':'Piutang'}: ${d.person}`;
   document.getElementById('mPayInfo').innerHTML=`Pokok: <strong>${fmt(d.amount)}</strong><br>Terbayar: <strong style="color:var(--green)">${fmt(d.amount-d.remaining)}</strong><br>Sisa: <strong style="color:var(--amber)">${fmt(d.remaining)}</strong>`;
   openM('mPay');
 }
-function savePay(){
+async function savePay(){
   const id=document.getElementById('payDId').value;
   const amt=parseFloat(document.getElementById('payAmt').value);
   const note=document.getElementById('payNote').value.trim();
@@ -1228,8 +1327,10 @@ function savePay(){
   const debt=D.debts[idx],actual=Math.min(amt,debt.remaining);
   debt.payments.push({id:uid(),amount:actual,note,date});
   debt.remaining=Math.max(0,debt.remaining-actual);
-  D.txs.push({id:uid(),desc:`Bayar ${debt.type==='hutang'?'hutang':'piutang'} ${debt.person}`,amount:actual,date,category:'Pembayaran Hutang',type:debt.type==='hutang'?'expense':'income'});
-  saveDB();closeM('mPay');render(curPage);
+  const txPay={id:uid(),desc:`Bayar ${debt.type==='hutang'?'hutang':'piutang'} ${debt.person}`,amount:actual,date,category:'Pembayaran Hutang',type:debt.type==='hutang'?'expense':'income'};
+  D.txs.push(txPay);
+  await saveItem('debts',debt);await saveItem('txs',txPay);
+  closeM('mPay');render(curPage);
   toast(debt.remaining===0?`✅ ${debt.person} lunas!`:`Cicilan ${fmtS(actual)} tersimpan`,'ok');
 }
 function showDD(id){
@@ -1257,156 +1358,30 @@ function openM(id){document.getElementById(id).classList.add('open');document.bo
 function closeM(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 document.querySelectorAll('.ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeM(el.id);}));
 
-// ═══ VOICE ════════════════════════════════════
-let vpOpen=false,SR=null,pendingV=null;
-function toggleVoice(){vpOpen?closeVoice():openVoice();}
-function openVoice(){
-  vpOpen=true;document.getElementById('vPanel').classList.add('open');
-  document.getElementById('vRes').classList.remove('show');
-  document.getElementById('vConfirm').style.display='none';
-  document.getElementById('vText').textContent='Contoh: "Beli bensin 20 ribu" atau "Gaji masuk 4 juta"';
-  document.getElementById('vStatus').textContent='Tap mikrofon untuk mulai';
-  pendingV=null;startSR();
-}
-function closeVoice(){vpOpen=false;document.getElementById('vPanel').classList.remove('open');stopSR();}
-function startSR(){
-  const SRC=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SRC){document.getElementById('vText').textContent='Gunakan Chrome untuk fitur suara.';return;}
-  SR=new SRC();SR.lang='id-ID';SR.continuous=false;SR.interimResults=true;
-  document.getElementById('fabBtn').classList.add('mic-on');
-  document.getElementById('vDots').style.display='flex';
-  document.getElementById('vStatus').textContent='Mendengarkan...';
-  document.getElementById('vText').textContent='';
-  SR.onresult=e=>{const txt=Array.from(e.results).map(r=>r[0].transcript).join('');document.getElementById('vText').textContent='"'+txt+'"';if(e.results[0].isFinal)parseVoice(txt);};
-  SR.onerror=e=>{document.getElementById('vStatus').textContent='Error: '+e.error;stopSR();};
-  SR.onend=stopSR;SR.start();
-}
-function stopSR(){
-  document.getElementById('fabBtn').classList.remove('mic-on');
-  document.getElementById('vDots').style.display='none';
-  if(!pendingV)document.getElementById('vStatus').textContent='Tap mikrofon untuk mulai';
-  if(SR){try{SR.stop();}catch(e){}SR=null;}
-}
-function parseVoice(raw){
-  const s=raw.toLowerCase().trim();let res=null;
-  const getAmt=t=>{const m=t.match(/(\d+(?:[.,]\d+)?)\s*(ribu|rb|juta|jt|ratus|k)?/i);if(!m)return 0;let n=parseFloat(m[1].replace(',','.'));const u=(m[2]||'').toLowerCase();if(['ribu','rb','k'].includes(u))n*=1000;else if(['juta','jt'].includes(u))n*=1e6;else if(u==='ratus')n*=100;return n;};
-  if(/bayar\s+hutang/i.test(s)){
-    const nm=s.replace(/bayar\s+hutang\s*/i,'').replace(/\s*\d.*/,'').trim(),amt=getAmt(s);
-    const debt=D.debts.find(d=>d.type==='hutang'&&d.person.toLowerCase().includes(nm)&&d.remaining>0);
-    if(debt){const pay=amt>0?Math.min(amt,debt.remaining):debt.remaining;res={action:'pay',debt,amount:pay,preview:`💳 Bayar hutang <strong>${debt.person}</strong> sebesar <strong style="color:var(--amber)">${fmt(pay)}</strong><br><small style="color:var(--text3)">Sisa: ${fmt(debt.remaining-pay)}</small>`};}
-    else res={action:'err',preview:`❌ Hutang <em>"${nm}"</em> tidak ditemukan`};
-  }else if(/hutang|pinjam dari/i.test(s)){
-    const amt=getAmt(s),nm=s.replace(/.*hutang\s*(ke\s*)?\s*/i,'').replace(/\s*\d.*/,'').trim();
-    if(amt>0)res={action:'addDebt',type:'hutang',person:nm||'?',amount:amt,preview:`💸 Hutang ke <strong>${nm||'?'}</strong> sebesar <strong style="color:var(--amber)">${fmt(amt)}</strong>`};
-  }else if(/piutang|pinjam ke/i.test(s)){
-    const amt=getAmt(s),nm=s.replace(/.*piutang\s*(ke\s*)?\s*/i,'').replace(/\s*\d.*/,'').trim();
-    if(amt>0)res={action:'addDebt',type:'piutang',person:nm||'?',amount:amt,preview:`💵 Piutang dari <strong>${nm||'?'}</strong> sebesar <strong style="color:var(--blue)">${fmt(amt)}</strong>`};
-  }else if(/masuk|gaji|terima|dapat|bonus|pendapatan/i.test(s)){
-    const amt=getAmt(s),desc=s.replace(/\s*\d+.*/,'').trim();
-    if(amt>0)res={action:'addTx',type:'income',amount:amt,desc:desc||'Pemasukan',category:'Gaji / Penghasilan',preview:`✅ <strong style="color:var(--green)">Pemasukan</strong>: ${desc} <strong>${fmt(amt)}</strong>`};
-  }else{
-    const amt=getAmt(s),desc=s.replace(/\s*\d+.*/,'').trim();
-    if(amt>0){const cat=guessCat(s);res={action:'addTx',type:'expense',amount:amt,desc:desc||'Pengeluaran',category:cat,preview:`🔴 <strong style="color:var(--red)">Pengeluaran</strong>: ${desc} <strong>${fmt(amt)}</strong> <small>[${cat}]</small>`};}
-  }
-  if(!res||res.action==='err'){document.getElementById('vRes').innerHTML=res?res.preview:'❓ Tidak dimengerti. Coba: "Makan 25 ribu"';document.getElementById('vRes').classList.add('show');document.getElementById('vStatus').textContent='Gagal — coba lagi';return;}
-  pendingV=res;document.getElementById('vRes').innerHTML=res.preview;document.getElementById('vRes').classList.add('show');document.getElementById('vStatus').textContent='Konfirmasi untuk menyimpan';document.getElementById('vConfirm').style.display='block';
-}
-function guessCat(t){
-  if(/makan|minum|kopi|warung|resto|nasi|bakso|ayam/i.test(t))return'Makanan & Minuman';
-  if(/bensin|bbm|parkir|ojek|grab|gojek|bis|kereta/i.test(t))return'Transport';
-  if(/belanja|beli|supermarket|mall/i.test(t))return'Belanja';
-  if(/game|nonton|bioskop|hiburan/i.test(t))return'Hiburan';
-  if(/dokter|obat|apotek|kesehatan/i.test(t))return'Kesehatan';
-  if(/listrik|air|pln|internet|tagihan/i.test(t))return'Tagihan & Utilitas';
-  if(/sekolah|kursus|buku|pendidikan/i.test(t))return'Pendidikan';
-  return'Lainnya';
-}
-function confirmVoice(){
-  if(!pendingV)return;const v=pendingV;
-  if(v.action==='addTx'){D.txs.push({id:uid(),desc:v.desc,amount:v.amount,date:toDay(),category:v.category,type:v.type});toast(`✓ ${fmtS(v.amount)} tersimpan`,'ok');}
-  else if(v.action==='addDebt'){D.debts.push({id:uid(),person:v.person,amount:v.amount,remaining:v.amount,note:'Via suara',date:toDay(),type:v.type,payments:[]});toast(`✓ ${v.type} ${v.person} tercatat`,'ok');}
-  else if(v.action==='pay'){
-    const i=D.debts.findIndex(x=>x.id===v.debt.id);
-    D.debts[i].payments.push({id:uid(),amount:v.amount,note:'Via suara',date:toDay()});
-    D.debts[i].remaining=Math.max(0,D.debts[i].remaining-v.amount);
-    D.txs.push({id:uid(),desc:`Bayar hutang ${v.debt.person}`,amount:v.amount,date:toDay(),category:'Pembayaran Hutang',type:'expense'});
-    toast(`✓ Cicilan ${fmtS(v.amount)} tersimpan`,'ok');
-  }
-  saveDB();pendingV=null;closeVoice();render(curPage);
-}
-
 // ═══ PWA INSTALL ══════════════════════════════
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredPrompt=e;
-  setTimeout(()=>document.getElementById('installBanner').classList.add('show'),2000);
-});
-window.addEventListener('appinstalled',()=>{
-  document.getElementById('installBanner').classList.remove('show');
-  deferredPrompt=null;toast('🎉 DompetKu berhasil diinstall!','ok');
-});
-function doInstall(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')toast('🎉 Menginstall...','ok');deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});}
-  else{toast('Buka menu Chrome (⋮) → "Tambahkan ke Layar Utama"','info');}
-}
-function triggerInstall(){
-  if(deferredPrompt)doInstall();
-  else toast('Buka menu Chrome ⋮ → "Tambahkan ke Layar Utama"','info');
-}
-function dismissInstall(){document.getElementById('installBanner').classList.remove('show');}
+let dP=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;setTimeout(()=>document.getElementById('instBanner').classList.add('show'),3000);});
+window.addEventListener('appinstalled',()=>{document.getElementById('instBanner').classList.remove('show');dP=null;toast('🎉 DompetKu berhasil diinstall!','ok');});
+function doInstall(){if(dP){dP.prompt();dP.userChoice.then(r=>{if(r.outcome==='accepted')toast('🎉 Installing...','ok');dP=null;document.getElementById('instBanner').classList.remove('show');});}else{toast('Buka ⋮ Chrome → "Tambahkan ke Layar Utama"','info');}}
+function triggerInstall(){if(dP)doInstall();else toast('Buka menu Chrome ⋮ → "Tambahkan ke Layar Utama"','info');}
 
 // ═══ OFFLINE DETECTION ════════════════════════
-function updateOnlineStatus(){
-  const bar=document.getElementById('offlineBar');
-  if(!navigator.onLine){bar.classList.add('show');}
-  else{bar.classList.remove('show');}
-}
-window.addEventListener('online',updateOnlineStatus);
-window.addEventListener('offline',updateOnlineStatus);
-updateOnlineStatus();
+window.addEventListener('online', ()=>document.getElementById('offBar').classList.remove('show'));
+window.addEventListener('offline',()=>document.getElementById('offBar').classList.add('show'));
+if(!navigator.onLine) document.getElementById('offBar').classList.add('show');
 
-// ═══ SERVICE WORKER (full offline cache) ══════
+// ═══ SERVICE WORKER ═══════════════════════════
 if('serviceWorker' in navigator){
-  const swCode=`
-const CACHE='dompetku-v3';
-const URLS=[
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-  'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
-  'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'
-];
-self.addEventListener('install',e=>{
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS).catch(()=>{})));
-  self.skipWaiting();
-});
-self.addEventListener('activate',e=>{
-  e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-  self.clients.claim();
-});
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET')return;
-  e.respondWith(
-    caches.match(e.request).then(cached=>{
-      if(cached)return cached;
-      return fetch(e.request).then(res=>{
-        if(res&&res.status===200&&res.type==='basic'){
-          const clone=res.clone();
-          caches.open(CACHE).then(c=>c.put(e.request,clone));
-        }
-        return res;
-      }).catch(()=>cached||new Response('Offline',{status:503}));
-    })
-  );
-});`;
-  const blob=new Blob([swCode],{type:'application/javascript'});
-  const swUrl=URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl,{scope:'./'})
-    .then(()=>console.log('SW registered'))
-    .catch(e=>console.log('SW failed',e));
+  const sw=`const C='dk-v4';
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js']).catch(()=>{})));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>{if(r)return r;return fetch(e.request).then(res=>{if(res&&res.status===200){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl));}return res;}).catch(()=>r||new Response('Offline',{status:503}));}));});`;
+  const blob=new Blob([sw],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob),{scope:'./'}).catch(()=>{});
 }
 
-// ═══ SEED DATA ════════════════════════════════
-function seedData(){
+// ═══ SEED & BOOT ══════════════════════════════
+async function seedData(){
   if(D.txs.length>0||D.debts.length>0)return;
   const nd=toDay();const pm=new Date();pm.setMonth(pm.getMonth()-1);const pmd=pm.toISOString().split('T')[0];
   D.txs=[
@@ -1416,19 +1391,19 @@ function seedData(){
     {id:uid(),desc:'Tagihan Listrik',amount:320000,date:pmd,category:'Tagihan & Utilitas',type:'expense'},
     {id:uid(),desc:'Belanja Bulanan',amount:750000,date:pmd,category:'Belanja',type:'expense'},
     {id:uid(),desc:'Gaji Bulan Lalu',amount:5000000,date:pmd,category:'Gaji / Penghasilan',type:'income'},
-    {id:uid(),desc:'Kopi & Snack',amount:45000,date:nd,category:'Makanan & Minuman',type:'expense'},
   ];
   D.debts=[
     {id:uid(),person:'Pak Budi',amount:500000,remaining:300000,note:'Pinjam darurat',date:pmd,type:'hutang',payments:[{id:uid(),amount:200000,note:'Cicilan ke-1',date:nd}]},
     {id:uid(),person:'Siti',amount:150000,remaining:150000,note:'Pinjam uang makan',date:nd,type:'piutang',payments:[]},
   ];
-  saveDB();
+  await saveAll('txs');await saveAll('debts');
 }
 
-// ── BOOT ──────────────────────────────────────
-seedData();
-applyTheme(D.cfg.theme||'dark');
-rDash();
+loadDB().then(async()=>{
+  await seedData();
+  applyTheme(D.cfg.theme||'dark');
+  rDash();
+});
 </script>
   <script>
   if ('serviceWorker' in navigator) {
@@ -1440,9 +1415,10 @@ rDash();
 </body>
 </html>"""
 
-with open('/mnt/user-data/outputs/index.html', 'w', encoding='utf-8') as f:
-    f.write(content)
+with open('/mnt/user-data/outputs/index.html','w',encoding='utf-8') as f:
+    f.write(HTML)
 
 import os
-size = os.path.getsize('/mnt/user-data/outputs/index.html')
-print(f"File written: {size:,} byt
+sz=os.path.getsize('/mnt/user-data/outputs/index.html')
+print(f"Written: {sz:,} bytes = {sz/1024:.1f} KB")
+PYEOF
