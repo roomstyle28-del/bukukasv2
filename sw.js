@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dompetku-v1';
+const CACHE_NAME = 'dompetku-v1.1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
