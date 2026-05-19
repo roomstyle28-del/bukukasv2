@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0d1117" id="themeColor">
@@ -13,7 +13,7 @@
 <title>DompetKu</title>
 <script>
 (function(){
-  const I2='""" + IC192 + r"""', I5='""" + IC512 + r"""';
+  const I2='PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWQ0ZWQ4Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGYxNzJhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSIzOCIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9Ijk2IiB5PSI4OCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5K8PC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxNDgiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Eb21wZXRLdTwvdGV4dD48L3N2Zz4=', I5='PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWQ0ZWQ4Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGYxNzJhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjI1NiIgeT0iMjkwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5K8PC90ZXh0Pjx0ZXh0IHg9IjI1NiIgeT0iNDAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNjAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RG9tcGV0S3U8L3RleHQ+PC9zdmc+';
   const mf={name:"DompetKu - Financial Tracker",short_name:"DompetKu",
     description:"Catatan keuangan pribadi",start_url:"./",display:"standalone",
     orientation:"portrait",background_color:"#0d1117",theme_color:"#1d4ed8",
@@ -37,7 +37,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;transition:background .2s,color .2s}
 #app{height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;position:relative}
-.page{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav) + var(--safe) + 20px);display:none}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav) + var(--safe) + 76px);display:none}
 .page.active{display:block}
 .page::-webkit-scrollbar{display:none}
 /* NAV */
@@ -121,6 +121,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .btn-blue{background:var(--bd);color:var(--blue)}
 
 /* ── SMART INPUT BAR ──────────────────────── */
+:root{--sb:58px} /* smart-bar height */
 .smart-bar{
   position:fixed;bottom:calc(var(--nav) + var(--safe) + 10px);
   left:50%;transform:translateX(-50%);
@@ -144,7 +145,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 /* ── SMART RESULT BUBBLE ─────────────────── */
 .smart-result{
-  position:fixed;bottom:calc(var(--nav) + var(--safe) + 78px);
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + var(--sb) + 18px);
   left:50%;transform:translateX(-50%) translateY(8px);
   width:calc(100% - 36px);max-width:444px;
   background:var(--bg2);border:1.5px solid var(--border2);
@@ -158,8 +159,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 /* VOICE HINT OVERLAY */
 .v-hint{
-  position:fixed;bottom:calc(var(--nav) + var(--safe) + 78px);
-  left:50%;transform:translateX(-50%) translateY(8px);
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + var(--sb) + 18px);
+  left:50%;transform:translateX(-50%);
   width:calc(100% - 36px);max-width:444px;
   background:var(--bg2);border:1.5px solid var(--border2);
   border-radius:16px;padding:14px;box-shadow:var(--sh);z-index:199;
@@ -177,7 +178,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .off-bar.show{transform:translateX(-50%) translateY(0)}
 
 /* INSTALL BANNER */
-.inst{position:fixed;bottom:calc(var(--nav) + var(--safe) + 10px);left:18px;right:18px;background:linear-gradient(135deg,#1d4ed8,#4f46e5);border-radius:16px;padding:13px 14px;z-index:150;display:none;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(29,78,216,.4);animation:fu .3s ease;}
+.inst{position:fixed;bottom:calc(var(--nav) + var(--safe) + var(--sb) + 18px);left:18px;right:18px;background:linear-gradient(135deg,#1d4ed8,#4f46e5);border-radius:16px;padding:13px 14px;z-index:150;display:none;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(29,78,216,.4);animation:fu .3s ease;}
 .inst.show{display:flex}
 /* MODAL */
 .ov{position:fixed;inset:0;background:var(--ov);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);z-index:400;display:none;align-items:flex-end;justify-content:center}
@@ -284,7 +285,7 @@ select.fi{cursor:pointer}
 
   <!-- SMART INPUT BAR -->
   <div class="smart-bar" id="smartBar">
-    <input type="text" id="smartInput" placeholder='Ketik: "beli bensin 20rb" atau "gaji masuk 5jt"' autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')processSmart()">
+    <input type="text" id="smartInput" placeholder='Ketik: "beli bensin 20rb" atau "gaji masuk 5jt"...' autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')processSmart()">
     <button class="sb-mic" id="micBtn" onclick="toggleMic()" title="Input suara">
       <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/></svg>
     </button>
@@ -763,7 +764,7 @@ async function confirmSmart() {
 
 async function execCmd(v) {
   if (v.action === 'addTx') {
-    const t = {id:uid(), desc:v.desc, amount:v.amount, date:toDay(), category:v.category, type:v.type};
+    const t = {id:uid(), desc:v.desc, amount:v.amount, date:toDay(), ts:new Date().toISOString(), category:v.category, type:v.type};
     D.txs.push(t);
     await saveItem('txs', t);
     toast(`✓ ${fmtS(v.amount)} tersimpan`,'ok');
@@ -776,7 +777,7 @@ async function execCmd(v) {
     const i = D.debts.findIndex(x=>x.id===v.debt.id);
     D.debts[i].payments.push({id:uid(), amount:v.amount, note:'', date:toDay()});
     D.debts[i].remaining = Math.max(0, D.debts[i].remaining - v.amount);
-    const txPay = {id:uid(), desc:`Bayar ${v.debt.type==='hutang'?'hutang':'piutang'} ${v.debt.person}`, amount:v.amount, date:toDay(), category:'Pembayaran Hutang', type:v.debt.type==='hutang'?'expense':'income'};
+    const txPay = {id:uid(), desc:`Bayar ${v.debt.type==='hutang'?'hutang':'piutang'} ${v.debt.person}`, amount:v.amount, date:toDay(), ts:new Date().toISOString(), category:'Pembayaran Hutang', type:v.debt.type==='hutang'?'expense':'income'};
     D.txs.push(txPay);
     await saveItem('debts', D.debts[i]);
     await saveItem('txs', txPay);
@@ -850,7 +851,7 @@ function calcStats(arr) {
 // ═══ DASHBOARD ════════════════════════════════
 function rDash() {
   const s=calcStats(), p=D.cfg.profile||{};
-  const recent=[...D.txs].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
+  const recent=[...D.txs].sort((a,b)=>{const va=a.ts||a.date,vb=b.ts||b.date;return vb>va?1:vb<va?-1:0;}).slice(0,8);
   document.getElementById('debtDot').classList.toggle('show', D.debts.filter(d=>d.remaining>0).length>0);
   document.getElementById('pg-dash').innerHTML=`
   <div class="ph">
@@ -914,9 +915,13 @@ function buildChart() {
 }
 
 // ═══ TRANSACTIONS ════════════════════════════
-let txF='all',txTime='all',txFrom='',txTo='';
+let txF='all',txTime='all',txFrom='',txTo='',txSort='newest';
 function filteredTxs() {
-  let arr=[...D.txs].sort((a,b)=>b.date.localeCompare(a.date));
+  // sort by timestamp (ts) if available, fallback to date string
+  let arr=[...D.txs].sort((a,b)=>{
+    const va = a.ts||a.date, vb = b.ts||b.date;
+    return txSort==='newest' ? (vb>va?1:vb<va?-1:0) : (va>vb?1:va<vb?-1:0);
+  });
   if(txF!=='all') arr=arr.filter(t=>t.type===txF);
   const nd=toDay();
   if(txTime==='today') arr=arr.filter(t=>t.date===nd);
@@ -948,7 +953,12 @@ function rTx() {
     <div class="smini-i" style="background:var(--rd)"><div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Keluar</div><div style="font-size:15px;font-weight:800;color:var(--red);margin-top:3px">${fmtS(s.exp)}</div></div>
     <div class="smini-i" style="background:var(--card);border:1px solid var(--border)"><div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.4px">Net</div><div style="font-size:15px;font-weight:800;color:${s.bal>=0?'var(--blue)':'var(--red)'};margin-top:3px">${fmtS(s.bal)}</div></div>
   </div>
-  <div style="padding:0 18px;margin-bottom:8px;font-size:12px;color:var(--text3);font-weight:600">${arr.length} transaksi</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:8px">
+    <span style="font-size:12px;color:var(--text3);font-weight:600">${arr.length} transaksi</span>
+    <button onclick="toggleSort()" style="display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .15s">
+      ${txSort==='newest'?'↓ Terbaru':'↑ Terlama'}
+    </button>
+  </div>
   <div style="padding:0 18px">
   ${arr.length===0?`<div class="empty"><div class="empty-i">📭</div><p>Tidak ada transaksi di periode ini</p></div>`
   :arr.map(t=>`
@@ -962,7 +972,7 @@ function rTx() {
         <div style="font-weight:800;font-size:14px;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'＋':'－'}${fmtS(t.amount)}</div>
         <div style="display:flex;gap:5px;margin-top:5px;justify-content:flex-end">
           <button class="btn btn-blue btn-sm" style="padding:4px 10px;font-size:11px" onclick="editTx('${t.id}')">✏️</button>
-          <button class="btn btn-red btn-sm"  style="padding:4px 10px;font-size:11px" onclick="delTx('${t.id}')">🗑️</button>
+          <button class="btn btn-red btn-sm"  style="padding:6px 12px;font-size:13px;min-width:36px;min-height:32px" onclick="delTx('${t.id}')">🗑️</button>
         </div>
       </div>
     </div>`).join('')}
@@ -970,6 +980,7 @@ function rTx() {
 }
 function setTxTime(v){txTime=v;if(v==='custom'){txFrom=txFrom||toDay();txTo=txTo||toDay();}rTx();}
 function setTxF(v){txF=v;rTx();}
+function toggleSort(){txSort=txSort==='newest'?'oldest':'newest';rTx();}
 
 // ═══ DEBTS ════════════════════════════════════
 let debtTab='hutang';
@@ -1272,14 +1283,24 @@ async function saveTx(){
     if(i>=0){D.txs[i]={...D.txs[i],desc,amount:amt,date,category:cat,type:curTxType};await saveItem('txs',D.txs[i]);}
     toast('Diperbarui ✓','ok');
   }else{
-    const t={id:uid(),desc,amount:amt,date,category:cat,type:curTxType};
+    const t={id:uid(),desc,amount:amt,date,ts:new Date().toISOString(),category:cat,type:curTxType};
     D.txs.push(t);await saveItem('txs',t);toast('Tersimpan ✓','ok');
   }
   closeM('mTx');render(curPage);
 }
 async function delTx(id){
-  if(!confirm('Hapus transaksi ini?'))return;
-  D.txs=D.txs.filter(t=>t.id!==id);await deleteItem('txs',id);render(curPage);toast('Dihapus','info');
+  // Avoid confirm() which can be blocked in PWA standalone mode
+  const t = D.txs.find(x=>x.id===id);
+  if(!t) return;
+  D.txs = D.txs.filter(x=>x.id!==id);
+  try {
+    await IDB.del('txs', id);
+  } catch(e) {
+    // fallback: rewrite whole store
+    try { await IDB.clear('txs'); await IDB.putAll('txs', D.txs); } catch(e2) {}
+  }
+  render(curPage);
+  toast('🗑️ Transaksi dihapus','info');
 }
 
 // ═══ DEBT CRUD ════════════════════════════════
@@ -1305,8 +1326,14 @@ async function saveDebt(){
   closeM('mDebt');render(curPage);toast(`${curDType==='hutang'?'Hutang':'Piutang'} ke ${person} tercatat ✓`,'ok');
 }
 async function delDebt(id){
-  if(!confirm('Hapus data ini?'))return;
-  D.debts=D.debts.filter(d=>d.id!==id);await deleteItem('debts',id);render(curPage);toast('Dihapus','info');
+  D.debts = D.debts.filter(d=>d.id!==id);
+  try {
+    await IDB.del('debts', id);
+  } catch(e) {
+    try { await IDB.clear('debts'); await IDB.putAll('debts', D.debts); } catch(e2) {}
+  }
+  render(curPage);
+  toast('🗑️ Data dihapus','info');
 }
 function openPay(id){
   const d=D.debts.find(x=>x.id===id);if(!d)return;
@@ -1327,7 +1354,7 @@ async function savePay(){
   const debt=D.debts[idx],actual=Math.min(amt,debt.remaining);
   debt.payments.push({id:uid(),amount:actual,note,date});
   debt.remaining=Math.max(0,debt.remaining-actual);
-  const txPay={id:uid(),desc:`Bayar ${debt.type==='hutang'?'hutang':'piutang'} ${debt.person}`,amount:actual,date,category:'Pembayaran Hutang',type:debt.type==='hutang'?'expense':'income'};
+  const txPay={id:uid(),desc:`Bayar ${debt.type==='hutang'?'hutang':'piutang'} ${debt.person}`,amount:actual,date,ts:new Date().toISOString(),category:'Pembayaran Hutang',type:debt.type==='hutang'?'expense':'income'};
   D.txs.push(txPay);
   await saveItem('debts',debt);await saveItem('txs',txPay);
   closeM('mPay');render(curPage);
@@ -1405,20 +1432,12 @@ loadDB().then(async()=>{
   rDash();
 });
 </script>
-  <script>
+<script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker.register('sw.js');
     });
   }
 </script>
 </body>
-</html>"""
-
-with open('/mnt/user-data/outputs/index.html','w',encoding='utf-8') as f:
-    f.write(HTML)
-
-import os
-sz=os.path.getsize('/mnt/user-data/outputs/index.html')
-print(f"Written: {sz:,} bytes = {sz/1024:.1f} KB")
-PYEOF
+</html>
